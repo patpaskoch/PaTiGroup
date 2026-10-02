@@ -1,0 +1,14 @@
+## Interface: 16001
+## Title: PaTiGroup
+## Notes: Party awareness: tank, healer, roles and the tank's target with its raid marker
+## Notes-deDE: Gruppe im Blick: Tank, Heiler, Rollen und das Ziel des Tanks mit Zielmarker
+## Author: PaTi
+## Version: 0.1.0
+## IconTexture: Interface\AddOns\PaTiGroup\Media\icon
+## SavedVariablesPerCharacter: PaTiGroupDB
+
+Shared\Shared.xml
+Locales\enUS.lua
+Locales\deDE.lua
+Logic.lua
+PaTiGroup.lua
