@@ -52,6 +52,7 @@ end
 -- Window ---------------------------------------------------------------------------------------
 
 local window = UI.CreateWindow("PaTiGroupFrame", "PaTiGroup", WIDTH, UI.Sizes.HeaderHeight + 4 * LINE + 2 * PAD)
+window:SetCombatMovable(true) -- no secure children: may be dragged in combat too (PaTiShared)
 
 -- One line: muted label, optional marker icon, value (may be a secret name: SetText only), muted extra text.
 local function newLine(labelKey, tooltip)

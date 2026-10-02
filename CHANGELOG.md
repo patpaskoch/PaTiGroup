@@ -16,6 +16,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 - Settings (language, scale, lock, panel opacity), Collapse, Test Mode, `/pg`, `/ptg`, `/patigroup` with show, hide,
   toggle, test, lock, unlock, reset, settings, debug, version. English texts, German translation. MIT license.
 - Icon: the PaTiSuite group icon (moved here from the former PaTiGroup, now PaTiLead).
+### Changed
+- The window can also be moved in combat (it has no secure buttons; PaTiShared `SetCombatMovable`, hardening 2026-10-02). A broken saved position falls back to the default instead of breaking the login.
 ### Fixed
 - Hardening: a broken SavedVariables save (not a table, a broken schema or scale) no longer breaks the login; only the broken value is replaced, every valid setting (also `false`) stays, and the migration is idempotent (tests/robustness_spec.lua).
 ### Known Issues
