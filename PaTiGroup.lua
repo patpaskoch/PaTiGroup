@@ -306,11 +306,19 @@ end)
 -- Roster, roles, targets and markers change rarely: a full repaint is cheap. UNIT_TARGET and the health/connection
 -- events come for many units; they repaint only when the unit matters (the tank, a healer).
 
-local function isTank(unit) return summary ~= nil and summary.tanks[1] ~= nil and summary.tanks[1].unit == unit end
+-- In a raid you are "raidN", but your own unit events arrive as "player": compare through UnitIsUnit then.
+local function sameUnit(token, eventUnit)
+    if token == eventUnit then return true end
+    return eventUnit == "player" and UnitIsUnit ~= nil and Logic.Flag(UnitIsUnit(token, "player"), isSecret) == true
+end
+
+local function isTank(unit)
+    return summary ~= nil and summary.tanks[1] ~= nil and sameUnit(summary.tanks[1].unit, unit)
+end
 
 local function isHealer(unit)
     for _, healer in ipairs(summary and summary.healers or {}) do
-        if healer.unit == unit then return true end
+        if sameUnit(healer.unit, unit) then return true end
     end
     return false
 end
