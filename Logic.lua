@@ -24,6 +24,8 @@ function Logic.Migrate(db)
     for key, value in pairs(Logic.DEFAULTS) do
         if db[key] == nil then db[key] = value end
     end
+    -- A broken scale would make SetScale fail on login: only a sane number is kept (saved values elsewhere stay).
+    if type(db.scale) ~= "number" or db.scale < 0.5 or db.scale > 2 then db.scale = Logic.DEFAULTS.scale end
     db.schema = Logic.SCHEMA
     return db
 end
