@@ -11,6 +11,7 @@ Logic.SCALES = { 0.8, 0.9, 1, 1.1, 1.25, 1.5 }
 -- Position (point, relativePoint, x, y) is written by the PaTiShared window, not listed here.
 Logic.DEFAULTS = {
     opacity = 0.75, -- panel body opacity (PaTiShared window; 0.3–1)
+    theme = "default", -- "default" | "woforever" | "dracula" (PaTiShared UI.THEMES; colours only)
     locked = false,
     collapsed = false,
     scale = 1,
@@ -26,6 +27,8 @@ function Logic.Migrate(db)
     end
     -- A broken scale would make SetScale fail on login: only a sane number is kept (saved values elsewhere stay).
     if type(db.scale) ~= "number" or db.scale < 0.5 or db.scale > 2 then db.scale = Logic.DEFAULTS.scale end
+    -- Theme: one of the three PaTiShared themes; a typo or an old value falls back to the default look.
+    if db.theme ~= "default" and db.theme ~= "woforever" and db.theme ~= "dracula" then db.theme = "default" end
     db.schema = Logic.SCHEMA
     return db
 end
