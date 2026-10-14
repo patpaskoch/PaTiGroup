@@ -5,7 +5,7 @@ Addon facts: `../../PaTiAdmin/docs/ARCHITECTURE.md` · open issues: `../../PaTiA
 
 ## This addon
 - Purpose: **party awareness** — who tanks, who heals, role counts, the tank's target and its raid marker. Display
-  only. Never: set markers, ready check, pull timer, leader actions (that is PaTiLead), threat/aggro (PaTiTank),
+  only. Never: set markers, ready check, pull timer, leader actions (that is PaTiLead), threat/aggro (PaTiAggro),
   HoTs/heal details (PaTiHeal), rotation, targeting, follow, anything automatic.
 - Since 2026-10-02 a new addon under the old name: the former PaTiGroup is PaTiLead. Its `PaTiGroupDB` (schema 1)
   is never read; its test IDs `PT-GROUP-001…199` are retired — new tests start at `PT-GROUP-200`.
