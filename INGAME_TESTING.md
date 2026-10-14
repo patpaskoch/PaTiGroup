@@ -63,6 +63,17 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-233 Tankziel wechselt → Anzeige wechselt sofort (ohne `/reload`)
 - [ ] PT-GROUP-234 Tankziel mit Raidmarker: das Marker-Icon steht vor dem Namen; Marker ändern/entfernen → Anzeige folgt
 - [ ] PT-GROUP-235 Kein Tank in der Gruppe: „kein Tank in der Gruppe“
+- [ ] PT-GROUP-236 Zeile „Tankziel“ anklicken (anderer Spieler ist Tank): genau dieser Gegner wird dein Ziel; Maus-Hover
+  hebt die Zeile hervor, Tooltip „Klick: ins Ziel nehmen“
+  - Owner 2026-10-14: Tankziel war nicht anklickbar → Klick eingebaut
+  - 🔧 FIX IMPLEMENTED 2026-10-14
+  - MANUAL RETEST REQUIRED
+- [ ] PT-GROUP-237 Im Kampf: Tank wechselt das Ziel → Klick nimmt das neue Ziel; kein Lua-Fehler, kein „Aktion blockiert“;
+  Fenster lässt sich im Kampf nicht verschieben/einklappen/ausblenden (Hinweis „im Kampf nicht verfügbar“)
+  - MANUAL RETEST REQUIRED
+- [ ] PT-GROUP-238 Du bist selbst Tank, solo, Test-Modus oder eingeklappt: nichts anklickbar; Fenster verschieben oder
+  Größe ändern: Klickfläche liegt danach wieder genau über der Zeile; Makro `/click PaTiGroupTankTargetButton` wirkt
+  - MANUAL RETEST REQUIRED
 
 ## Combat / Sicherheit
 

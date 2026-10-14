@@ -1,5 +1,6 @@
 -- PaTiGroup: party awareness. Who tanks, who heals, what the tank has targeted and its raid marker.
--- Display only — no secure frames: nothing is targeted, marked or cast, so the window may update in combat.
+-- Display only, with one exception (owner 2026-10-14): a click on the tank-target line targets what the tank has
+-- targeted (like /assist) — one secure button, set up out of combat; nothing is targeted, marked or cast by itself.
 local addonName, ns = ...
 local UI, L, Logic = ns.UI, ns.UI.L, ns.Logic
 
@@ -52,7 +53,7 @@ end
 -- Window ---------------------------------------------------------------------------------------
 
 local window = UI.CreateWindow("PaTiGroupFrame", "PaTiGroup", WIDTH, UI.Sizes.HeaderHeight + 4 * LINE + 2 * PAD)
-window:SetCombatMovable(true) -- no secure children: may be dragged in combat too (PaTiShared)
+-- Not movable in combat: the tank-target click button lies over the window and can only follow it out of combat.
 
 -- One line: muted label, optional marker icon, value (may be a secret name: SetText only), muted extra text.
 local function newLine(labelKey, tooltip)
@@ -112,6 +113,7 @@ local function showLines(shown)
         if shown[key] then
             line:ClearAllPoints()
             line:SetPoint("TOPLEFT", PAD, -y)
+            line.top = y -- from the window top (the tank-target click button is placed from it)
             y = y + LINE
         end
     end
@@ -152,7 +154,7 @@ end
 
 local summary -- last Logic.Summary (nil when solo); UNIT_TARGET uses it to repaint only the target line
 
-local function paint()
+local function paintLines()
     if not DB then return end
     window:SetTestMode(testMode)
     if DB.collapsed then
@@ -187,6 +189,58 @@ local function paint()
     showLines({ tank = true, healer = true, target = true, roles = true })
 end
 
+-- Tank-target click (owner 2026-10-14) ------------------------------------------------------------
+-- One SecureActionButton over the tank-target line: type "target", unit "<tank>target" (party1target …). The token is
+-- read at click time, so in combat a click takes whatever the tank has targeted right then — one click, one target,
+-- like /assist. Secure attributes and position change only out of combat. The button is not a child of the window
+-- (the display-only window stays free in combat); it is laid over the line in screen coordinates instead.
+local targetButton = CreateFrame("Button", "PaTiGroupTankTargetButton", UIParent, "SecureActionButtonTemplate")
+targetButton:RegisterForClicks("AnyUp", "AnyDown")
+targetButton:Hide()
+local targetHighlight = targetButton:CreateTexture(nil, "HIGHLIGHT")
+targetHighlight:SetAllPoints()
+UI.Paint(targetHighlight, "SetColorTexture", "Accent", 0.12)
+UI.SetTooltip(targetButton, function() return { L.TANK_TARGET, L.TIP_TANK_TARGET, L.TIP_TANK_TARGET_CLICK } end)
+local buttonPending = false -- changes waited for the end of combat
+
+-- The tank whose target a click takes: the first tank of the group, never you (your own target needs no button).
+local function clickTank()
+    local tank = not testMode and summary and summary.tanks[1]
+    if not tank or tank.unit == "player" then return nil end
+    if UnitIsUnit and Logic.Flag(UnitIsUnit(tank.unit, "player"), isSecret) == true then return nil end -- raid: you
+    return tank
+end
+
+local function placeTargetButton()
+    if InCombatLockdown() then buttonPending = true; return end
+    buttonPending = false
+    local line, tank = lines.target, clickTank()
+    local left, top = window:GetLeft(), window:GetTop()
+    if not tank or not DB or DB.collapsed or not window:IsShown() or not line:IsShown() or not left or not top then
+        targetButton:SetAttribute("type1", nil)
+        targetButton:SetAttribute("unit", nil)
+        targetButton:Hide()
+        return
+    end
+    local ratio = window:GetEffectiveScale() / UIParent:GetEffectiveScale()
+    targetButton:ClearAllPoints()
+    targetButton:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", (left + PAD) * ratio, (top - line.top) * ratio)
+    targetButton:SetSize(line:GetWidth() * ratio, LINE * ratio)
+    targetButton:SetFrameStrata(window:GetFrameStrata())
+    targetButton:SetFrameLevel(window:GetFrameLevel() + 10)
+    targetButton:SetAttribute("type1", "target")
+    targetButton:SetAttribute("unit", Logic.TargetOf(tank.unit))
+    targetButton:Show()
+end
+
+local function paint()
+    paintLines()
+    placeTargetButton()
+end
+-- Dragging the window: the button does not follow while moving; it is laid over the line again where it stops.
+window.header:HookScript("OnDragStart", function() if not InCombatLockdown() then targetButton:Hide() end end)
+window.header:HookScript("OnDragStop", function() placeTargetButton() end)
+
 -- Settings -------------------------------------------------------------------------------------
 
 local modal
@@ -202,7 +256,7 @@ local function buildSettings()
     modal:AddRow("SCALE", UI.CreateDropdown(modal, 170, {
         items = function() return scales end,
         get = function() return DB.scale end,
-        set = function(scale) DB.scale = scale; window:SetScale(scale) end,
+        set = function(scale) DB.scale = scale; window:SetScale(scale); placeTargetButton() end,
     }))
     modal:AddControls(UI.CreateCheckbox(modal, "LOCK_WINDOW", {
         get = function() return window:IsLocked() end,
@@ -232,23 +286,31 @@ local function toggleTestMode()
     paint()
 end
 
+-- Collapse and hide change what lies under the tank-target click button: out of combat only.
 local function toggleCollapsed()
+    if InCombatLockdown() then say("COMBAT_LOCKED"); return end
     DB.collapsed = not DB.collapsed
     paint()
 end
 
-local function setShown(shown, quiet) -- no secure frames: fine in combat
+local function setShown(shown, quiet)
+    if InCombatLockdown() then
+        if not quiet then say("COMBAT_LOCKED") end
+        return false
+    end
     window:SetShown(shown)
+    placeTargetButton()
     if not shown and not quiet then say("HIDDEN_HINT") end
     return true
 end
 
--- Optional PaTiSuite control panel: the same rules as the commands, without chat lines.
+-- Optional PaTiSuite control panel: the same rules as the commands, without chat lines (false = not possible now).
 window.suiteSetShown = function(shown) return setShown(shown, true) end
 
 local function resetPosition()
     DB.point, DB.relativePoint, DB.x, DB.y = nil, nil, nil, nil
     window:Attach(DB, -330, 20)
+    placeTargetButton()
 end
 
 local function printDebug()
@@ -327,7 +389,8 @@ end
 
 local events = CreateFrame("Frame")
 for _, event in ipairs({ "PLAYER_LOGIN", "PLAYER_ENTERING_WORLD", "GROUP_ROSTER_UPDATE", "PLAYER_TARGET_CHANGED",
-    "UNIT_TARGET", "RAID_TARGET_UPDATE", "UNIT_CONNECTION", "UNIT_FLAGS", "UNIT_HEALTH", "UNIT_NAME_UPDATE" }) do
+    "UNIT_TARGET", "RAID_TARGET_UPDATE", "UNIT_CONNECTION", "UNIT_FLAGS", "UNIT_HEALTH", "UNIT_NAME_UPDATE",
+    "PLAYER_REGEN_ENABLED" }) do -- after combat: the tank-target click button follows roster and window again
     events:RegisterEvent(event)
 end
 for _, event in ipairs({ "PLAYER_ROLES_ASSIGNED", "ROLE_CHANGED_INFORM" }) do

@@ -4,6 +4,9 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 
 ## [Unreleased] — 0.1.0
 ### Added
+- Click the tank-target line to target that enemy (owner 2026-10-14) — like /assist, also in combat (the click takes
+  what the tank has targeted right then). One secure button, set up out of combat; for a key binding use a macro
+  `/click PaTiGroupTankTargetButton`. In combat the window can no longer be moved, collapsed or hidden.
 - Themes (owner wish 2026-10-03): Settings → Window → Theme — Default (the PaTi look as before), WoForever (warm brown, gold/bronze) or Dracula (dark, purple/pink/cyan accents). Colours only; layout, secure buttons and behaviour are unchanged. Saved per character in this addon (`theme`, unknown values → Default); Restore Defaults returns to Default. PaTiSuite can switch all PaTi windows at once.
 - New addon PaTiGroup "party awareness" (owner decision 2026-10-02; the former PaTiGroup is now PaTiLead): one small
   window with Tank (name, "+n" for more tanks; you first if you tank), Healer (name, dead/offline), Tank target (the

@@ -3,7 +3,7 @@
 <img src="assets/icon-128.png" width="96" alt="PaTiGroup icon">
 
 Party awareness for World of Warcraft: Forever (Interface 16001): see at a glance who tanks, who heals, and what
-the tank has targeted — with its raid marker. Display only: PaTiGroup never targets, marks or casts anything.
+the tank has targeted — with its raid marker. One click on the tank target takes it as your target; otherwise PaTiGroup never targets, marks or casts anything.
 
 > Status: in development, not yet released. Not yet tested in game.
 >
@@ -22,12 +22,15 @@ the tank has targeted — with its raid marker. Display only: PaTiGroup never ta
 ## Features
 - **Tank:** the tank's name (you first, if you tank yourself; "+1" when there are more tanks)
 - **Healer:** the healer's name, with "dead" or "offline" when WoW reports it
-- **Tank target:** what the tank has targeted, with its raid marker; "no target" when there is none
+- **Tank target:** what the tank has targeted, with its raid marker; "no target" when there is none.
+  **Click it to target that enemy** (like /assist) — also in combat: the click takes what the tank has targeted at
+  that moment. Key binding: a macro with `/click PaTiGroupTankTargetButton`. Not shown when you are the tank
 - **Roles:** "1 Tank · 1 Heal · 3 DD", plus members without a role
 - Party and raid; solo: "Not in a group"
 - Roles come from WoW (role check / group finder). Without assigned roles PaTiGroup shows "without role" — it never
   guesses a role from the class. Unreadable (restricted) values are never guessed either.
-- No secure frames: updates normally in combat.
+- Updates normally in combat. The click button is set up out of combat, so in combat the window cannot be moved,
+  collapsed or hidden (after a roster change in combat the click follows when combat ends).
 - ••• menu: Settings, Lock, Collapse, Test Mode, Hide. Settings: language, scale, lock, panel opacity.
   Languages: English, Deutsch (others fall back to English)
 
