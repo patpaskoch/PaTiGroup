@@ -201,7 +201,6 @@ local targetHighlight = targetButton:CreateTexture(nil, "HIGHLIGHT")
 targetHighlight:SetAllPoints()
 UI.Paint(targetHighlight, "SetColorTexture", "Accent", 0.12)
 UI.SetTooltip(targetButton, function() return { L.TANK_TARGET, L.TIP_TANK_TARGET, L.TIP_TANK_TARGET_CLICK } end)
-local buttonPending = false -- changes waited for the end of combat
 
 -- The tank whose target a click takes: the first tank of the group, never you (your own target needs no button).
 local function clickTank()
@@ -212,8 +211,7 @@ local function clickTank()
 end
 
 local function placeTargetButton()
-    if InCombatLockdown() then buttonPending = true; return end
-    buttonPending = false
+    if InCombatLockdown() then return end -- PLAYER_REGEN_ENABLED repaints and places it again
     local line, tank = lines.target, clickTank()
     local left, top = window:GetLeft(), window:GetTop()
     if not tank or not DB or DB.collapsed or not window:IsShown() or not line:IsShown() or not left or not top then
