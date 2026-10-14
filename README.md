@@ -22,7 +22,7 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 ## Features
 - **Tank:** the tank's name (you first, if you tank yourself; "+1" when there are more tanks)
 - **Healer:** the healer's name, with "dead" or "offline" when WoW reports it
-- **Tank target:** what the tank has targeted, with its raid marker; "no target" when there is none.
+- **Tank target** (top line, highlighted): what the tank has targeted, with its raid marker; "no target" when there is none.
   **Click it to target that enemy** (like /assist) — also in combat: the click takes what the tank has targeted at
   that moment. Key binding: a macro with `/click PaTiGroupTankTargetButton`. Not shown when you are the tank
 - **Roles:** "1 Tank · 1 Heal · 3 DD", plus members without a role

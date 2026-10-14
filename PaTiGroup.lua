@@ -8,6 +8,9 @@ local DB
 local testMode = false
 
 local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
+-- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): first line, taller, own panel,
+-- larger name and marker.
+local TARGET_LINE, TARGET_MARKER = 28, 20
 local PAD = UI.Spacing.MD
 local MARKER_TEXTURE = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_%d"
 local TEST = { tank = "TEST_TANK", healer = "TEST_HEALER", target = "TEST_TARGET", marker = 8,
@@ -56,9 +59,10 @@ local window = UI.CreateWindow("PaTiGroupFrame", "PaTiGroup", WIDTH, UI.Sizes.He
 -- Not movable in combat: the tank-target click button lies over the window and can only follow it out of combat.
 
 -- One line: muted label, optional marker icon, value (may be a secret name: SetText only), muted extra text.
-local function newLine(labelKey, tooltip)
+local function newLine(labelKey, tooltip, height)
     local line = CreateFrame("Frame", nil, window)
-    line:SetSize(WIDTH - 2 * PAD, LINE)
+    line.height = height or LINE
+    line:SetSize(WIDTH - 2 * PAD, line.height)
     line.label = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Muted)
     line.label:SetPoint("LEFT")
     line.label:SetWidth(LABEL_WIDTH)
@@ -67,6 +71,7 @@ local function newLine(labelKey, tooltip)
     line.labelWidth = labelKey and LABEL_WIDTH or 0 -- no label: a plain message line
     if labelKey then UI.BindText(line.label, labelKey) end
     line.icon = line:CreateTexture(nil, "ARTWORK")
+    line.markerSize = MARKER
     line.icon:SetSize(MARKER, MARKER)
     line.icon:SetPoint("LEFT", line.labelWidth, 0)
     line.icon:Hide()
@@ -86,17 +91,36 @@ local lines = {
     message = newLine(nil),
     tank = newLine("TANK"),
     healer = newLine("HEALER"),
-    target = newLine("TANK_TARGET", function() return { L.TANK_TARGET, L.TIP_TANK_TARGET } end),
+    target = newLine("TANK_TARGET", function() return { L.TANK_TARGET, L.TIP_TANK_TARGET } end, TARGET_LINE),
     roles = newLine("ROLES", function() return { L.ROLES, L.TIP_ROLES_SOURCE } end),
 }
-local ORDER = { "message", "tank", "healer", "target", "roles" }
+local ORDER = { "message", "target", "tank", "healer", "roles" }
+
+-- Tank target panel: plain textures of its line (a lighter shade with an accent stripe, as PaTiHeal's heal target),
+-- the name in the title font, a larger marker and a small gap to the lines below.
+do
+    local line = lines.target
+    local panel = line:CreateTexture(nil, "BACKGROUND")
+    panel:SetPoint("TOPLEFT", -UI.Spacing.SM, 0)
+    panel:SetPoint("BOTTOMRIGHT", UI.Spacing.SM, 0)
+    UI.Paint(panel, "SetColorTexture", "PanelHover")
+    local stripe = line:CreateTexture(nil, "BORDER")
+    stripe:SetPoint("TOPLEFT", panel, "TOPLEFT")
+    stripe:SetPoint("BOTTOMLEFT", panel, "BOTTOMLEFT")
+    stripe:SetWidth(2)
+    UI.Paint(stripe, "SetColorTexture", "Accent")
+    line.value:SetFontObject(UI.Fonts.Title)
+    line.markerSize = TARGET_MARKER
+    line.icon:SetSize(TARGET_MARKER, TARGET_MARKER)
+    line.gapAfter = UI.Spacing.SM
+end
 
 -- value: text (plain or secret) or nil; muted: grey value; extra: { text, colour } or nil; marker: 1-8 or nil.
 local function setLine(line, value, muted, extra, marker)
     line.icon:SetTexture(marker and MARKER_TEXTURE:format(marker) or nil)
     line.icon:SetShown(marker ~= nil)
     line.value:ClearAllPoints()
-    line.value:SetPoint("LEFT", line.labelWidth + (marker and MARKER + UI.Spacing.SM or 0), 0)
+    line.value:SetPoint("LEFT", line.labelWidth + (marker and line.markerSize + UI.Spacing.SM or 0), 0)
     line.value:SetPoint("RIGHT", line.extra, "LEFT", -UI.Spacing.SM, 0)
     line.value:SetText(value)
     line.value:SetTextColor(UI.Color(muted and "TextMuted" or "Text"))
@@ -114,7 +138,7 @@ local function showLines(shown)
             line:ClearAllPoints()
             line:SetPoint("TOPLEFT", PAD, -y)
             line.top = y -- from the window top (the tank-target click button is placed from it)
-            y = y + LINE
+            y = y + line.height + (line.gapAfter or 0)
         end
     end
     window:SetHeight(DB.collapsed and UI.Sizes.HeaderHeight or y + PAD)
@@ -223,7 +247,7 @@ local function placeTargetButton()
     local ratio = window:GetEffectiveScale() / UIParent:GetEffectiveScale()
     targetButton:ClearAllPoints()
     targetButton:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", (left + PAD) * ratio, (top - line.top) * ratio)
-    targetButton:SetSize(line:GetWidth() * ratio, LINE * ratio)
+    targetButton:SetSize(line:GetWidth() * ratio, line.height * ratio)
     targetButton:SetFrameStrata(window:GetFrameStrata())
     targetButton:SetFrameLevel(window:GetFrameLevel() + 10)
     targetButton:SetAttribute("type1", "target")

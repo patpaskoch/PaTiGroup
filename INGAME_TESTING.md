@@ -74,6 +74,11 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-238 Du bist selbst Tank, solo, Test-Modus oder eingeklappt: nichts anklickbar; Fenster verschieben oder
   Größe ändern: Klickfläche liegt danach wieder genau über der Zeile; Makro `/click PaTiGroupTankTargetButton` wirkt
   - MANUAL RETEST REQUIRED
+- [ ] PT-GROUP-239 Tankziel ist die oberste Zeile, auf eigenem helleren Feld mit Akzentstreifen, Name und Zielmarkierung
+  größer – in der Gruppe auf einen Blick erkennbar; Klickfläche deckt die ganze (höhere) Zeile ab; alle drei Themes
+  - Owner 2026-10-14: Tankziel hätte er gern besser gesehen → hervorgehoben
+  - 🔧 FIX IMPLEMENTED 2026-10-14
+  - MANUAL RETEST REQUIRED
 
 ## Combat / Sicherheit
 
