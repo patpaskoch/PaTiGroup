@@ -12,22 +12,19 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 
 ```
 ┌ PaTiGroup                         ••• ┐
-│ Tank      Patrick                     │
-│ Heiler    Stefanie                    │
-│ Tankziel  ☠ Dunkler Kultist           │
-│ Rollen    1 Tank · 1 Heal · 3 DD      │
+│ [face] Tankziel  ☠ Dunkler Kultist    │
+│ Tank Patrick      Heiler Stefanie     │
 └───────────────────────────────────────┘
 ```
 
 ## Features
-- **Tank:** the tank's name (you first, if you tank yourself; "+1" when there are more tanks)
-- **Healer:** the healer's name, with "dead" or "offline" when WoW reports it
-- **Tank target** (top line, highlighted): what the tank has targeted, with its raid marker; "no target" when there is none.
+- **Tank and healer** in one line: the names (you first, if you tank yourself), the healer with "dead" or
+  "offline" when WoW reports it, "+1" when there are more healers
+- **Tank target** (top line, highlighted): what the tank has targeted, with the enemy's portrait and its raid marker; "no target" when there is none.
   **Click it to target that enemy** (like /assist) — also in combat: the click takes what the tank has targeted at
   that moment. Key binding: a macro with `/click PaTiGroupTankTargetButton`. Not shown when you are the tank
-- **Roles:** "1 Tank · 1 Heal · 3 DD", plus members without a role
 - Party and raid; solo: "Not in a group"
-- Roles come from WoW (role check / group finder). Without assigned roles PaTiGroup shows "without role" — it never
+- Roles come from WoW (role check / group finder). Without assigned roles nobody shows as tank or healer ("-") — PaTiGroup never
   guesses a role from the class. Unreadable (restricted) values are never guessed either.
 - Updates normally in combat. The click button is set up out of combat, so in combat the window cannot be moved,
   collapsed or hidden (after a roster change in combat the click follows when combat ends).
@@ -47,7 +44,7 @@ Each one is installed on its own and works on its own; none of them is needed by
 - [PaTiAuras](https://github.com/patpaskoch/PaTiAuras) – buffs, procs, tracking, group buffs and weapon imbues
 - [PaTiAggro](https://github.com/patpaskoch/PaTiAggro) – aggro for tank, healer and damage (formerly PaTiTank)
 - [PaTiRota](https://github.com/patpaskoch/PaTiRota) – your own skill priority with cooldowns and fixed cast buttons
-- **PaTiGroup** – party awareness: tank, healer, roles and the tank's target *(this addon)*
+- **PaTiGroup** – party awareness: tank, healer and the tank's target *(this addon)*
 - [PaTiLead](https://github.com/patpaskoch/PaTiLead) – lead the group: raid markers, ready check and pull timer
 - [PaTiQuest](https://github.com/patpaskoch/PaTiQuest) – selected quest and its objectives
 - [PaTiDungeon](https://github.com/patpaskoch/PaTiDungeon) – instance, group and combat status

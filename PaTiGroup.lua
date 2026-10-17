@@ -11,10 +11,12 @@ local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
 -- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): first line, taller, own panel,
 -- larger name and marker.
 local TARGET_LINE, TARGET_MARKER = 28, 20
+-- The enemy's portrait in front (owner 2026-10-17): it reads as a unit you can click, like a target frame.
+local PORTRAIT = TARGET_LINE - 2 * UI.Spacing.XS
+local TARGET_LABEL_WIDTH = 56 -- narrower than the other labels: portrait and marker need the room
 local PAD = UI.Spacing.MD
 local MARKER_TEXTURE = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_%d"
-local TEST = { tank = "TEST_TANK", healer = "TEST_HEALER", target = "TEST_TARGET", marker = 8,
-    counts = { TANK = 1, HEALER = 1, DAMAGER = 3, NONE = 0 } }
+local TEST = { tank = "TEST_TANK", healer = "TEST_HEALER", target = "TEST_TARGET", marker = 8 }
 
 local function say(key, ...)
     print("|cff68caffPaTiGroup:|r " .. L[key]:format(...))
@@ -55,7 +57,8 @@ end
 
 -- Window ---------------------------------------------------------------------------------------
 
-local window = UI.CreateWindow("PaTiGroupFrame", "PaTiGroup", WIDTH, UI.Sizes.HeaderHeight + 4 * LINE + 2 * PAD)
+local window = UI.CreateWindow("PaTiGroupFrame", "PaTiGroup", WIDTH,
+    UI.Sizes.HeaderHeight + TARGET_LINE + LINE + 2 * PAD)
 -- Not movable in combat: the tank-target click button lies over the window and can only follow it out of combat.
 
 -- One line: muted label, optional marker icon, value (may be a secret name: SetText only), muted extra text.
@@ -87,14 +90,40 @@ local function newLine(labelKey, tooltip, height)
     return line
 end
 
+-- Tank and healer share one line (owner 2026-10-17): two halves, each a muted label and a name. Two font strings
+-- instead of one joined text, because a name may be a secret value (SetText only, never concatenated).
+local function newPairLine()
+    local line = CreateFrame("Frame", nil, window)
+    line.height = LINE
+    line:SetSize(WIDTH - 2 * PAD, LINE)
+    local half = (WIDTH - 2 * PAD) / 2
+    line.extra = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Text)
+    line.extra:SetPoint("RIGHT")
+    line.values = {}
+    for index, key in ipairs({ "TANK", "HEALER" }) do
+        local label = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Muted)
+        label:SetPoint("LEFT", (index - 1) * half, 0)
+        UI.BindText(label, key)
+        local value = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Text)
+        value:SetPoint("LEFT", label, "RIGHT", UI.Spacing.SM, 0)
+        if index == 1 then
+            value:SetPoint("RIGHT", line, "LEFT", half - UI.Spacing.SM, 0)
+        else
+            value:SetPoint("RIGHT", line.extra, "LEFT", -UI.Spacing.SM, 0)
+        end
+        value:SetJustifyH("LEFT")
+        value:SetWordWrap(false)
+        line.values[index] = value
+    end
+    return line
+end
+
 local lines = {
     message = newLine(nil),
-    tank = newLine("TANK"),
-    healer = newLine("HEALER"),
     target = newLine("TANK_TARGET", function() return { L.TANK_TARGET, L.TIP_TANK_TARGET } end, TARGET_LINE),
-    roles = newLine("ROLES", function() return { L.ROLES, L.TIP_ROLES_SOURCE } end),
+    party = newPairLine(),
 }
-local ORDER = { "message", "target", "tank", "healer", "roles" }
+local ORDER = { "message", "target", "party" }
 
 -- Tank target panel: plain textures of its line (a lighter shade with an accent stripe, as PaTiHeal's heal target),
 -- the name in the title font, a larger marker and a small gap to the lines below.
@@ -113,6 +142,22 @@ do
     line.markerSize = TARGET_MARKER
     line.icon:SetSize(TARGET_MARKER, TARGET_MARKER)
     line.gapAfter = UI.Spacing.SM
+    line.portrait = line:CreateTexture(nil, "ARTWORK")
+    line.portrait:SetSize(PORTRAIT, PORTRAIT)
+    line.portrait:SetPoint("LEFT")
+    line.label:ClearAllPoints()
+    line.label:SetPoint("LEFT", PORTRAIT + UI.Spacing.SM, 0)
+    line.label:SetWidth(TARGET_LABEL_WIDTH)
+    line.labelWidth = PORTRAIT + UI.Spacing.SM + TARGET_LABEL_WIDTH
+    line.icon:ClearAllPoints()
+    line.icon:SetPoint("LEFT", line.labelWidth, 0)
+end
+
+-- token: whose face to show (nil = none). SetPortraitTexture takes the unit token itself, no unit data is read.
+local function setPortrait(token)
+    local portrait = lines.target.portrait
+    if token and SetPortraitTexture then SetPortraitTexture(portrait, token) end
+    portrait:SetShown(token ~= nil)
 end
 
 -- value: text (plain or secret) or nil; muted: grey value; extra: { text, colour } or nil; marker: 1-8 or nil.
@@ -155,24 +200,33 @@ local function moreExtra(list)
     return more and { more, "TextMuted" } or nil
 end
 
-local function rolesText(counts)
-    local text = L.ROLES_TEXT:format(counts.TANK, counts.HEALER, counts.DAMAGER)
-    if counts.NONE > 0 then text = text .. " · " .. L.ROLES_UNSET:format(counts.NONE) end
-    return text
+-- Tank | Healer line. member nil = nobody with that role (muted "-"); extra: the healer's state or "+n" more.
+local function paintParty(tank, healer, extra)
+    local line = lines.party
+    for index, member in ipairs({ tank or false, healer or false }) do
+        local value = line.values[index]
+        value:SetText(member and member.name or L.NOBODY_SHORT)
+        value:SetTextColor(UI.Color(member and "Text" or "TextMuted"))
+    end
+    line.extra:SetText(extra and extra[1] or "")
+    line.extra:SetTextColor(UI.Color(extra and extra[2] or "TextMuted"))
 end
 
--- The tank's target: name and marker read straight from the token (secret values only reach SetText).
+-- The tank's target: name, marker and portrait read straight from the token (secret values only reach SetText).
 local function paintTarget(tank)
     if not tank then
+        setPortrait(nil)
         setLine(lines.target, L.NO_TANK, true)
         return
     end
     local token = Logic.TargetOf(tank.unit)
     if Logic.Flag(UnitExists(token), isSecret) ~= true then
+        setPortrait(nil)
         setLine(lines.target, L.NO_TARGET, true)
         return
     end
     local marker = Logic.MarkerIndex(GetRaidTargetIndex and GetRaidTargetIndex(token), isSecret)
+    setPortrait(token)
     setLine(lines.target, UnitName(token), false, nil, marker)
 end
 
@@ -186,11 +240,10 @@ local function paintLines()
         return
     end
     if testMode then
-        setLine(lines.tank, L[TEST.tank])
-        setLine(lines.healer, L[TEST.healer])
+        paintParty({ name = L[TEST.tank] }, { name = L[TEST.healer] })
+        setPortrait("player") -- any face will do for the example
         setLine(lines.target, L[TEST.target], false, nil, TEST.marker)
-        setLine(lines.roles, rolesText(TEST.counts))
-        showLines({ tank = true, healer = true, target = true, roles = true })
+        showLines({ party = true, target = true })
         return
     end
     local members = readMembers()
@@ -202,15 +255,9 @@ local function paintLines()
     end
     summary = Logic.Summary(members)
     local tank, healer = summary.tanks[1], summary.healers[1]
-    if tank then setLine(lines.tank, tank.name, false, moreExtra(summary.tanks)) else setLine(lines.tank, L.NOBODY, true) end
-    if healer then
-        setLine(lines.healer, healer.name, false, stateExtra(healer) or moreExtra(summary.healers))
-    else
-        setLine(lines.healer, L.NOBODY, true)
-    end
+    paintParty(tank, healer, healer and (stateExtra(healer) or moreExtra(summary.healers)))
     paintTarget(tank)
-    setLine(lines.roles, rolesText(summary.counts))
-    showLines({ tank = true, healer = true, target = true, roles = true })
+    showLines({ party = true, target = true })
 end
 
 -- Tank-target click (owner 2026-10-14) ------------------------------------------------------------

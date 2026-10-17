@@ -37,8 +37,8 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-212 Lock/Unlock (••• und `/pg lock` / `unlock`): gesperrt nicht verschiebbar
 - [ ] PT-GROUP-213 Größe (Scale) und Panel-Deckkraft 30–100 % wirken (Deckkraft: nur der Hintergrund)
 - [ ] PT-GROUP-214 ••• → Einklappen: nur der Header bleibt; Ausklappen; bleibt nach `/reload`
-- [ ] PT-GROUP-215 Test Mode `/pg test`: Tank Patrick, Heiler Stefanie, Tankziel mit Totenschädel „Dunkler Kultist“,
-  „1 Tank · 1 Heal · 3 DD“, TEST-Badge
+- [ ] PT-GROUP-215 Test Mode `/pg test`: Tank Patrick, Heiler Stefanie, Tankziel mit Totenschädel „Dunkler Kultist“ und Bild (Testmodus: dein eigenes Gesicht),
+  TEST-Badge; keine Rollenzeile
 - [ ] PT-GROUP-216 `/pg reset` setzt die Position zurück; „Standard wiederherstellen“ setzt Einstellungen zurück
 - [ ] PT-GROUP-217 deDE: alle Texte deutsch, keine Schlüsselnamen, nichts abgeschnitten (auch lange Namen); enUS nach
   Sprachwahl
@@ -49,11 +49,14 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-221 Gruppe beitreten / verlassen: Anzeige wechselt ohne `/reload`
 - [ ] PT-GROUP-222 Tank wird mit Namen erkannt (Rolle über Rollencheck/Gruppensuche gesetzt)
 - [ ] PT-GROUP-223 Heiler wird mit Namen erkannt
-- [ ] PT-GROUP-224 Rollenzeile stimmt (Tank / Heal / DD) und ändert sich bei Rollenwechsel
-- [ ] PT-GROUP-225 Ohne zugewiesene Rollen: „niemand mit dieser Rolle“ und „n ohne Rolle“ — keine geratene Rolle
+- ~~PT-GROUP-224 Rollenzeile stimmt (Tank / Heal / DD) und ändert sich bei Rollenwechsel~~
+  - RETIRED 2026-10-17 – Rollenzeile entfernt (Owner: unnötig)
+- ~~PT-GROUP-225 Ohne zugewiesene Rollen: „niemand mit dieser Rolle“ und „n ohne Rolle“ — keine geratene Rolle~~
+  - RETIRED 2026-10-17 – Rollenzeile entfernt (Owner: unnötig); ersetzt durch PT-GROUP-229
 - [ ] PT-GROUP-226 Heiler tot → „tot“ (rot); wiederbelebt → verschwindet
 - [ ] PT-GROUP-227 Heiler offline → „offline“ (rot)
-- [ ] PT-GROUP-228 Schlachtzug: Tank, Heiler und Rollen stimmen (falls verfügbar)
+- [ ] PT-GROUP-228 Schlachtzug: Tank und Heiler stimmen (falls verfügbar)
+- [ ] PT-GROUP-229 Tank und Heiler stehen in einer Zeile („Tank Name   Heiler Name“); ohne Rolle „-“ (grau), keine geratene Rolle; lange Namen werden abgeschnitten, nichts überlappt; tot/offline rechts in Rot
 
 ## Tankziel
 
@@ -85,6 +88,7 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-240 Im Kampf: Anzeige aktualisiert sich (Tankziel, Heiler tot), kein Lua-Fehler
 - [ ] PT-GROUP-241 Keine `ADDON_ACTION_BLOCKED` / `ADDON_ACTION_FORBIDDEN`; `taint.log` ohne PaTiGroup-Eintrag
 - [ ] PT-GROUP-242 PaTiGroup wählt, markiert oder zaubert nie etwas
+- [ ] PT-GROUP-243 Tankziel zeigt das Bild (Porträt) des Gegners vor „Tankziel“; Zielwechsel → Bild wechselt sofort; kein Ziel → kein Bild; die Zeile wirkt dadurch klickbar
 
 ## Combined
 

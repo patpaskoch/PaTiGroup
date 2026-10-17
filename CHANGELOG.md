@@ -4,6 +4,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 
 ## [Unreleased] — 0.1.0
 ### Changed
+- Tank and healer share one line, the tank target shows the enemy's portrait in front (owner 2026-10-17: a face reads as
+  something you can click). The window is two lines shorter.
 - The tank target stands out (owner 2026-10-14: "would have liked to see it better"): it is now the first line, taller,
   on its own lighter panel with an accent stripe, with a larger name and raid marker.
 ### Added
@@ -27,5 +29,7 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 - The window can also be moved in combat (it has no secure buttons; PaTiShared `SetCombatMovable`, hardening 2026-10-02). A broken saved position falls back to the default instead of breaking the login.
 ### Fixed
 - Hardening: a broken SavedVariables save (not a table, a broken schema or scale) no longer breaks the login; only the broken value is replaced, every valid setting (also `false`) stays, and the migration is idempotent (tests/robustness_spec.lua).
+### Removed
+- The Roles line ("1 Tank · 1 Heal · 3 DD", owner 2026-10-17: not needed).
 ### Known Issues
 - Not tested in game yet (`INGAME_TESTING.md`). Whether roles are reported outside the group finder is unconfirmed.
