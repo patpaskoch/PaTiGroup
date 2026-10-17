@@ -89,6 +89,7 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-241 Keine `ADDON_ACTION_BLOCKED` / `ADDON_ACTION_FORBIDDEN`; `taint.log` ohne PaTiGroup-Eintrag
 - [ ] PT-GROUP-242 PaTiGroup wählt, markiert oder zaubert nie etwas
 - [ ] PT-GROUP-243 Tankziel zeigt das Bild (Porträt) des Gegners vor „Tankziel“; Zielwechsel → Bild wechselt sofort; kein Ziel → kein Bild; die Zeile wirkt dadurch klickbar
+- [ ] PT-GROUP-244 Tank tot → „tot“ (rot) hinter dem Tanknamen; wiederbelebt → verschwindet; Tank offline → „offline“ (rot)
 
 ## Combined
 

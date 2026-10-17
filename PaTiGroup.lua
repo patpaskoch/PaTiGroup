@@ -97,23 +97,21 @@ local function newPairLine()
     line.height = LINE
     line:SetSize(WIDTH - 2 * PAD, LINE)
     local half = (WIDTH - 2 * PAD) / 2
-    line.extra = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Text)
-    line.extra:SetPoint("RIGHT")
-    line.values = {}
+    line.values, line.extras = {}, {}
     for index, key in ipairs({ "TANK", "HEALER" }) do
         local label = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Muted)
         label:SetPoint("LEFT", (index - 1) * half, 0)
         UI.BindText(label, key)
+        -- Each half has its own state text ("dead", "offline", "+1") at its right end (owner 2026-10-17: the tank's
+        -- death was not shown).
+        local extra = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Text)
+        extra:SetPoint("RIGHT", line, "LEFT", index * half - UI.Spacing.SM, 0)
         local value = line:CreateFontString(nil, "OVERLAY", UI.Fonts.Text)
         value:SetPoint("LEFT", label, "RIGHT", UI.Spacing.SM, 0)
-        if index == 1 then
-            value:SetPoint("RIGHT", line, "LEFT", half - UI.Spacing.SM, 0)
-        else
-            value:SetPoint("RIGHT", line.extra, "LEFT", -UI.Spacing.SM, 0)
-        end
+        value:SetPoint("RIGHT", extra, "LEFT", -UI.Spacing.XS, 0)
         value:SetJustifyH("LEFT")
         value:SetWordWrap(false)
-        line.values[index] = value
+        line.values[index], line.extras[index] = value, extra
     end
     return line
 end
@@ -200,16 +198,16 @@ local function moreExtra(list)
     return more and { more, "TextMuted" } or nil
 end
 
--- Tank | Healer line. member nil = nobody with that role (muted "-"); extra: the healer's state or "+n" more.
-local function paintParty(tank, healer, extra)
+-- Tank | Healer line. member nil = nobody with that role (muted "-"); extras = { tank's, healer's }: state or "+n".
+local function paintParty(tank, healer, extras)
     local line = lines.party
     for index, member in ipairs({ tank or false, healer or false }) do
-        local value = line.values[index]
+        local value, extra = line.values[index], extras and extras[index]
         value:SetText(member and member.name or L.NOBODY_SHORT)
         value:SetTextColor(UI.Color(member and "Text" or "TextMuted"))
+        line.extras[index]:SetText(extra and extra[1] or "")
+        line.extras[index]:SetTextColor(UI.Color(extra and extra[2] or "TextMuted"))
     end
-    line.extra:SetText(extra and extra[1] or "")
-    line.extra:SetTextColor(UI.Color(extra and extra[2] or "TextMuted"))
 end
 
 -- The tank's target: name, marker and portrait read straight from the token (secret values only reach SetText).
@@ -255,7 +253,10 @@ local function paintLines()
     end
     summary = Logic.Summary(members)
     local tank, healer = summary.tanks[1], summary.healers[1]
-    paintParty(tank, healer, healer and (stateExtra(healer) or moreExtra(summary.healers)))
+    paintParty(tank, healer, {
+        tank and (stateExtra(tank) or moreExtra(summary.tanks)),
+        healer and (stateExtra(healer) or moreExtra(summary.healers)),
+    })
     paintTarget(tank)
     showLines({ party = true, target = true })
 end
