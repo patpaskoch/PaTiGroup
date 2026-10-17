@@ -8,7 +8,7 @@ local DB
 local testMode = false
 
 local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
--- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): first line, taller, own panel,
+-- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): below tank and healer, taller, own panel,
 -- larger name and marker.
 local TARGET_LINE, TARGET_MARKER = 28, 20
 -- The enemy's portrait in front (owner 2026-10-17): it reads as a unit you can click, like a target frame.
@@ -121,10 +121,11 @@ local lines = {
     target = newLine("TANK_TARGET", function() return { L.TANK_TARGET, L.TIP_TANK_TARGET } end, TARGET_LINE),
     party = newPairLine(),
 }
-local ORDER = { "message", "target", "party" }
+-- Tank and healer above the tank target (owner 2026-10-17); the gap sits between them.
+local ORDER = { "message", "party", "target" }
 
 -- Tank target panel: plain textures of its line (a lighter shade with an accent stripe, as PaTiHeal's heal target),
--- the name in the title font, a larger marker and a small gap to the lines below.
+-- the name in the title font, a larger marker and a small gap to the line above.
 do
     local line = lines.target
     local panel = line:CreateTexture(nil, "BACKGROUND")
@@ -139,7 +140,7 @@ do
     line.value:SetFontObject(UI.Fonts.Title)
     line.markerSize = TARGET_MARKER
     line.icon:SetSize(TARGET_MARKER, TARGET_MARKER)
-    line.gapAfter = UI.Spacing.SM
+    lines.party.gapAfter = UI.Spacing.SM -- the target panel keeps a little room to the line above
     line.portrait = line:CreateTexture(nil, "ARTWORK")
     line.portrait:SetSize(PORTRAIT, PORTRAIT)
     line.portrait:SetPoint("LEFT")
