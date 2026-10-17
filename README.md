@@ -13,7 +13,8 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 ```
 ┌ PaTiGroup                         ••• ┐
 │ Tank Patrick      Heiler Stefanie     │
-│ [face] Tankziel  ☠ Dunkler Kultist    │
+│ Tankziel                              │
+│ [face] ☠ Dunkler Kultist              │
 └───────────────────────────────────────┘
 ```
 

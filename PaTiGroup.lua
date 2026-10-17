@@ -10,10 +10,11 @@ local testMode = false
 local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
 -- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): below tank and healer, taller, own panel,
 -- larger name and marker.
-local TARGET_LINE, TARGET_MARKER = 28, 20
--- The enemy's portrait in front (owner 2026-10-17): it reads as a unit you can click, like a target frame.
-local PORTRAIT = TARGET_LINE - 2 * UI.Spacing.XS
-local TARGET_LABEL_WIDTH = 56 -- narrower than the other labels: portrait and marker need the room
+-- The enemy's portrait in front (owner 2026-10-17): it reads as a unit you can click, like a target frame. The label
+-- "Tank target" stands above it as a small caption; portrait, marker and name form the row below.
+local PORTRAIT, CAPTION, TARGET_MARKER = 24, 12, 20
+local TARGET_LINE = CAPTION + PORTRAIT + UI.Spacing.XS
+local TARGET_ROW_Y = PORTRAIT / 2 - TARGET_LINE / 2 -- vertical centre of the portrait row, from the line centre
 local PAD = UI.Spacing.MD
 local MARKER_TEXTURE = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_%d"
 local TEST = { tank = "TEST_TANK", healer = "TEST_HEALER", target = "TEST_TARGET", marker = 8 }
@@ -143,13 +144,16 @@ do
     lines.party.gapAfter = UI.Spacing.SM -- the target panel keeps a little room to the line above
     line.portrait = line:CreateTexture(nil, "ARTWORK")
     line.portrait:SetSize(PORTRAIT, PORTRAIT)
-    line.portrait:SetPoint("LEFT")
+    line.portrait:SetPoint("BOTTOMLEFT")
     line.label:ClearAllPoints()
-    line.label:SetPoint("LEFT", PORTRAIT + UI.Spacing.SM, 0)
-    line.label:SetWidth(TARGET_LABEL_WIDTH)
-    line.labelWidth = PORTRAIT + UI.Spacing.SM + TARGET_LABEL_WIDTH
+    line.label:SetPoint("TOPLEFT")
+    line.label:SetWidth(WIDTH - 2 * PAD)
+    line.labelWidth = PORTRAIT + UI.Spacing.SM -- marker and name start right of the portrait
+    line.valueY = TARGET_ROW_Y
     line.icon:ClearAllPoints()
-    line.icon:SetPoint("LEFT", line.labelWidth, 0)
+    line.icon:SetPoint("LEFT", line.labelWidth, TARGET_ROW_Y)
+    line.extra:ClearAllPoints()
+    line.extra:SetPoint("RIGHT", 0, TARGET_ROW_Y)
 end
 
 -- token: whose face to show (nil = none). SetPortraitTexture takes the unit token itself, no unit data is read.
@@ -164,7 +168,7 @@ local function setLine(line, value, muted, extra, marker)
     line.icon:SetTexture(marker and MARKER_TEXTURE:format(marker) or nil)
     line.icon:SetShown(marker ~= nil)
     line.value:ClearAllPoints()
-    line.value:SetPoint("LEFT", line.labelWidth + (marker and line.markerSize + UI.Spacing.SM or 0), 0)
+    line.value:SetPoint("LEFT", line.labelWidth + (marker and line.markerSize + UI.Spacing.SM or 0), line.valueY or 0)
     line.value:SetPoint("RIGHT", line.extra, "LEFT", -UI.Spacing.SM, 0)
     line.value:SetText(value)
     line.value:SetTextColor(UI.Color(muted and "TextMuted" or "Text"))
