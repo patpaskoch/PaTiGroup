@@ -95,6 +95,7 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
   - Owner 2026-10-17: Klick aufs Tankziel soll angreifen, nicht nur auswählen
   - ✅ VERIFIED 2026-10-17
   - Owner: „das klick vom tank ziel … funktioniert wie ne eins“
+  - Owner: „ich kann links und rechts klick aufs tank ziel“
 
 ## Combined
 
