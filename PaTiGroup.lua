@@ -293,8 +293,8 @@ local function placeTargetButton()
     local left, top = window:GetLeft(), window:GetTop()
     if not tank or not DB or DB.collapsed or not window:IsShown() or not line:IsShown() or not left or not top then
         targetButton:SetAttribute("type1", nil)
-        targetButton:SetAttribute("macrotext1", nil)
         targetButton:SetAttribute("type2", nil)
+        targetButton:SetAttribute("macrotext2", nil)
         targetButton:SetAttribute("unit", nil)
         targetButton:Hide()
         return
@@ -305,11 +305,11 @@ local function placeTargetButton()
     targetButton:SetSize(line:GetWidth() * ratio, line.height * ratio)
     targetButton:SetFrameStrata(window:GetFrameStrata())
     targetButton:SetFrameLevel(window:GetFrameLevel() + 10)
-    -- Left: target + auto attack (macro); right: only target it. The token is read at click time.
+    -- Left: only target it; right: target + auto attack (macro; owner 2026-10-17). The token is read at click time.
     local token = Logic.TargetOf(tank.unit)
-    targetButton:SetAttribute("type1", "macro")
-    targetButton:SetAttribute("macrotext1", Logic.AttackMacro(token))
-    targetButton:SetAttribute("type2", "target")
+    targetButton:SetAttribute("type1", "target")
+    targetButton:SetAttribute("type2", "macro")
+    targetButton:SetAttribute("macrotext2", Logic.AttackMacro(token))
     targetButton:SetAttribute("unit", token)
     targetButton:Show()
 end

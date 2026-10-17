@@ -7,8 +7,9 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 - Tank and healer share one line, the tank target shows the enemy's portrait in front (owner 2026-10-17: a face reads as
   something you can click). The window is two lines shorter. Tank and healer stand above the tank target
   (owner 2026-10-17). The caption "Tank target" stands above the portrait.
-- Tank target click (owner 2026-10-17: "attack, not only select"): left click targets the enemy and starts the auto
-  attack (`/target <tank>target` + `/startattack`, one secure macro), right click only targets it. Tank and healer each show "dead" / "offline" (before only
+- Tank target click (owner 2026-10-17: "attack, not only select"): left click only targets the enemy, right click
+  targets it and starts the auto attack (`/target <tank>target` + `/startattack`, one secure macro). (Briefly the
+  other way round on the same day; swapped at the owner's wish.) Tank and healer each show "dead" / "offline" (before only
   the healer did; owner 2026-10-17: "the tank's death is not shown").
 - The tank target stands out (owner 2026-10-14: "would have liked to see it better"): it is now the first line, taller,
   on its own lighter panel with an accent stripe, with a larger name and raid marker.
