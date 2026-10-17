@@ -97,9 +97,11 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
   - Owner: „das klick vom tank ziel … funktioniert wie ne eins“
   - Owner: „ich kann links und rechts klick aufs tank ziel“
   - RETIRED 2026-10-17 – Belegung getauscht (Owner: links nur anwählen, rechts angreifen), ersetzt durch PT-GROUP-246
-- [ ] PT-GROUP-246 Linksklick aufs Tankziel: nur ins Ziel nehmen, kein Angriff; Rechtsklick: Gegner wird dein Ziel und
+- [x] PT-GROUP-246 Linksklick aufs Tankziel: nur ins Ziel nehmen, kein Angriff; Rechtsklick: Gegner wird dein Ziel und
   du greifst an (Automatischer Angriff startet); auch im Kampf, kein „Aktion blockiert“; Tooltip nennt beides
   - Owner 2026-10-17: links nur anwählen, rechts angreifen
+  - ✅ VERIFIED 2026-10-17
+  - Owner: „links und rechts klick aufs tank ziel geht auch gut“
 
 ## Combined
 
