@@ -99,3 +99,9 @@ function Logic.MoreText(list)
     if #list > 1 then return "+" .. (#list - 1) end
     return nil
 end
+
+-- Left click on the tank-target line (owner 2026-10-17: "attack, not only select"): target what the tank has targeted
+-- and start the auto attack — the classic assist macro, run by the player's one click. token: Logic.TargetOf(...).
+function Logic.AttackMacro(token)
+    return "/target " .. token .. "\n/startattack"
+end

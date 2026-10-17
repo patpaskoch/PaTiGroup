@@ -91,6 +91,8 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-242 PaTiGroup wählt, markiert oder zaubert nie etwas
 - [ ] PT-GROUP-243 Tankziel zeigt das Bild (Porträt) des Gegners, darüber steht klein „Tankziel“; Markierung und Name rechts neben dem Bild, auf einer Höhe; Zielwechsel → Bild wechselt sofort; kein Ziel → kein Bild; die Zeile wirkt dadurch klickbar
 - [ ] PT-GROUP-244 Tank tot → „tot“ (rot) hinter dem Tanknamen; wiederbelebt → verschwindet; Tank offline → „offline“ (rot)
+- [ ] PT-GROUP-245 Linksklick aufs Tankziel: Gegner wird dein Ziel und du greifst an (Nahkampf/Automatischer Angriff startet); Rechtsklick: nur ins Ziel nehmen, kein Angriff; auch im Kampf, kein „Aktion blockiert“; Tooltip nennt beides
+  - Owner 2026-10-17: Klick aufs Tankziel soll angreifen, nicht nur auswählen
 
 ## Combined
 
