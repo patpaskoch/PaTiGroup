@@ -266,18 +266,47 @@ local function paintLines()
     showLines({ party = true, target = true })
 end
 
--- Tank-target click (owner 2026-10-14) ------------------------------------------------------------
--- One SecureActionButton over the tank-target line: type "target", unit "<tank>target" (party1target …). The token is
--- read at click time, so in combat a click takes whatever the tank has targeted right then — one click, one target,
--- like /assist. Secure attributes and position change only out of combat. The button is not a child of the window
--- (the display-only window stays free in combat); it is laid over the line in screen coordinates instead.
-local targetButton = CreateFrame("Button", "PaTiGroupTankTargetButton", UIParent, "SecureActionButtonTemplate")
-targetButton:RegisterForClicks("AnyUp", "AnyDown")
-targetButton:Hide()
-local targetHighlight = targetButton:CreateTexture(nil, "HIGHLIGHT")
-targetHighlight:SetAllPoints()
-UI.Paint(targetHighlight, "SetColorTexture", "Accent", 0.12)
-UI.SetTooltip(targetButton, function() return { L.TANK_TARGET, L.TIP_TANK_TARGET, L.TIP_TANK_TARGET_CLICK } end)
+-- Click buttons (owner 2026-10-14, 2026-10-18) -------------------------------------------------------
+-- SecureActionButtons over the lines: the tank target (type "target", unit "<tank>target"; right click = assist
+-- macro) and, on the tank/healer line, the tank and the healer themselves (type "target", their unit). The tokens are
+-- read at click time — one click, one target. Secure attributes and positions change only out of combat. The buttons
+-- are not children of the window (the display-only window stays free in combat); they are laid over the lines in
+-- screen coordinates instead.
+local function newClickButton(name, tooltip)
+    local button = CreateFrame("Button", name, UIParent, "SecureActionButtonTemplate")
+    button:RegisterForClicks("AnyUp", "AnyDown")
+    button:Hide()
+    local highlight = button:CreateTexture(nil, "HIGHLIGHT")
+    highlight:SetAllPoints()
+    UI.Paint(highlight, "SetColorTexture", "Accent", 0.12)
+    UI.SetTooltip(button, tooltip)
+    return button
+end
+
+local targetButton = newClickButton("PaTiGroupTankTargetButton",
+    function() return { L.TANK_TARGET, L.TIP_TANK_TARGET, L.TIP_TANK_TARGET_CLICK } end)
+-- Tank and healer halves of the pair line (owner 2026-10-18: "Tank und Heiler klickbar zum Auswählen").
+local memberButtons = {
+    newClickButton("PaTiGroupTankButton", function() return { L.TANK, L.TIP_MEMBER_CLICK } end),
+    newClickButton("PaTiGroupHealerButton", function() return { L.HEALER, L.TIP_MEMBER_CLICK } end),
+}
+local clickButtons = { targetButton, memberButtons[1], memberButtons[2] }
+
+local function clearButton(button)
+    for _, key in ipairs({ "type1", "type2", "macrotext2", "unit" }) do button:SetAttribute(key, nil) end
+    button:Hide()
+end
+
+-- Lays button over line, from x (window units, from the line's left edge) with the given width.
+local function overLine(button, line, x, width)
+    local ratio = window:GetEffectiveScale() / UIParent:GetEffectiveScale()
+    button:ClearAllPoints()
+    button:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", (window:GetLeft() + PAD + x) * ratio,
+        (window:GetTop() - line.top) * ratio)
+    button:SetSize(width * ratio, line.height * ratio)
+    button:SetFrameStrata(window:GetFrameStrata())
+    button:SetFrameLevel(window:GetFrameLevel() + 10)
+end
 
 -- The tank whose target a click takes: the first tank of the group, never you (your own target needs no button).
 local function clickTank()
@@ -287,40 +316,51 @@ local function clickTank()
     return tank
 end
 
-local function placeTargetButton()
-    if InCombatLockdown() then return end -- PLAYER_REGEN_ENABLED repaints and places it again
+local function placeClickButtons()
+    if InCombatLockdown() then return end -- PLAYER_REGEN_ENABLED repaints and places them again
+    local placeable = DB and not DB.collapsed and window:IsShown() and window:GetLeft() and window:GetTop()
     local line, tank = lines.target, clickTank()
-    local left, top = window:GetLeft(), window:GetTop()
-    if not tank or not DB or DB.collapsed or not window:IsShown() or not line:IsShown() or not left or not top then
-        targetButton:SetAttribute("type1", nil)
-        targetButton:SetAttribute("type2", nil)
-        targetButton:SetAttribute("macrotext2", nil)
-        targetButton:SetAttribute("unit", nil)
-        targetButton:Hide()
-        return
+    if not placeable or not tank or not line:IsShown() then
+        clearButton(targetButton)
+    else
+        overLine(targetButton, line, 0, line:GetWidth())
+        -- Left: only target it; right: target + auto attack (macro; owner 2026-10-17). The token is read at click time.
+        local token = Logic.TargetOf(tank.unit)
+        targetButton:SetAttribute("type1", "target")
+        targetButton:SetAttribute("type2", "macro")
+        targetButton:SetAttribute("macrotext2", Logic.AttackMacro(token))
+        targetButton:SetAttribute("unit", token)
+        targetButton:Show()
     end
-    local ratio = window:GetEffectiveScale() / UIParent:GetEffectiveScale()
-    targetButton:ClearAllPoints()
-    targetButton:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", (left + PAD) * ratio, (top - line.top) * ratio)
-    targetButton:SetSize(line:GetWidth() * ratio, line.height * ratio)
-    targetButton:SetFrameStrata(window:GetFrameStrata())
-    targetButton:SetFrameLevel(window:GetFrameLevel() + 10)
-    -- Left: only target it; right: target + auto attack (macro; owner 2026-10-17). The token is read at click time.
-    local token = Logic.TargetOf(tank.unit)
-    targetButton:SetAttribute("type1", "target")
-    targetButton:SetAttribute("type2", "macro")
-    targetButton:SetAttribute("macrotext2", Logic.AttackMacro(token))
-    targetButton:SetAttribute("unit", token)
-    targetButton:Show()
+    -- Tank and healer: a click targets that member (you too, when you are the tank or healer). Nobody: no button.
+    local party = lines.party
+    local half = party:GetWidth() / 2
+    for index, member in ipairs({
+        not testMode and summary and summary.tanks[1] or false,
+        not testMode and summary and summary.healers[1] or false,
+    }) do
+        local button = memberButtons[index]
+        if not placeable or not member or not party:IsShown() then
+            clearButton(button)
+        else
+            overLine(button, party, (index - 1) * half, half)
+            button:SetAttribute("type1", "target")
+            button:SetAttribute("unit", member.unit)
+            button:Show()
+        end
+    end
 end
 
 local function paint()
     paintLines()
-    placeTargetButton()
+    placeClickButtons()
 end
--- Dragging the window: the button does not follow while moving; it is laid over the line again where it stops.
-window.header:HookScript("OnDragStart", function() if not InCombatLockdown() then targetButton:Hide() end end)
-window.header:HookScript("OnDragStop", function() placeTargetButton() end)
+-- Dragging the window: the buttons do not follow while moving; they are laid over the lines again where it stops.
+window.header:HookScript("OnDragStart", function()
+    if InCombatLockdown() then return end
+    for _, button in ipairs(clickButtons) do button:Hide() end
+end)
+window.header:HookScript("OnDragStop", function() placeClickButtons() end)
 
 -- Settings -------------------------------------------------------------------------------------
 
@@ -337,7 +377,7 @@ local function buildSettings()
     modal:AddRow("SCALE", UI.CreateDropdown(modal, 170, {
         items = function() return scales end,
         get = function() return DB.scale end,
-        set = function(scale) DB.scale = scale; window:SetScale(scale); placeTargetButton() end,
+        set = function(scale) DB.scale = scale; window:SetScale(scale); placeClickButtons() end,
     }))
     modal:AddControls(UI.CreateCheckbox(modal, "LOCK_WINDOW", {
         get = function() return window:IsLocked() end,
@@ -380,7 +420,7 @@ local function setShown(shown, quiet)
         return false
     end
     window:SetShown(shown)
-    placeTargetButton()
+    placeClickButtons()
     if not shown and not quiet then say("HIDDEN_HINT") end
     return true
 end
@@ -391,7 +431,7 @@ window.suiteSetShown = function(shown) return setShown(shown, true) end
 local function resetPosition()
     DB.point, DB.relativePoint, DB.x, DB.y = nil, nil, nil, nil
     window:Attach(DB, -330, 20)
-    placeTargetButton()
+    placeClickButtons()
 end
 
 local function printDebug()

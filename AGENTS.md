@@ -18,6 +18,8 @@ Addon facts: `../../PaTiAdmin/docs/ARCHITECTURE.md` · open issues: `../../PaTiA
   coordinates (not a window child). Attributes, position and visibility only out of combat (pending until
   PLAYER_REGEN_ENABLED). In combat: no move, collapse or hide (COMBAT_LOCKED; PaTiSuite gets false). Never targets
   by itself; hidden when you are the tank.
+  Two more (owner 2026-10-18): `PaTiGroupTankButton` and `PaTiGroupHealerButton` over the halves of the tank/healer
+  line, type1 "target", unit = that member; same rules (out of combat only, hidden when nobody has the role).
 - Slash: `/pg`, `/ptg`, `/patigroup`.
 
 ## Checks

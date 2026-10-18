@@ -20,7 +20,8 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 
 ## Features
 - **Tank and healer** in one line: the names (you first, if you tank yourself), each with "dead" or "offline" when
-  WoW reports it, "+1" when there are more tanks or healers
+  WoW reports it, "+1" when there are more tanks or healers. **Click a name to target that player**
+  (macro: `/click PaTiGroupTankButton` or `/click PaTiGroupHealerButton`)
 - **Tank target** (below tank and healer, highlighted): what the tank has targeted, with the enemy's portrait and its raid marker; "no target" when there is none.
   **Left click: only target that enemy**, **right click: target it and attack** (/target + /startattack) —
   also in combat: the click takes what the tank has targeted at

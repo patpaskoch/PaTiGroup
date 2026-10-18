@@ -4,6 +4,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 
 ## [Unreleased] — 0.1.0
 ### Changed
+- Tank and healer are clickable (owner 2026-10-18): a click on the tank or the healer half of the line targets that
+  player (one secure button each, `PaTiGroupTankButton` / `PaTiGroupHealerButton`, set up out of combat).
 - Tank and healer share one line, the tank target shows the enemy's portrait in front (owner 2026-10-17: a face reads as
   something you can click). The window is two lines shorter. Tank and healer stand above the tank target
   (owner 2026-10-17). The caption "Tank target" stands above the portrait.

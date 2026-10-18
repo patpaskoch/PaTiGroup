@@ -104,6 +104,13 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
   - Owner 2026-10-17: links nur anwählen, rechts angreifen
   - ✅ VERIFIED 2026-10-17
   - Owner: „links und rechts klick aufs tank ziel geht auch gut“
+- [ ] PT-GROUP-247 Klick auf den Tanknamen: der Tank wird dein Ziel; Klick auf den Heilernamen: der Heiler wird dein Ziel;
+  Maus-Hover hebt die Hälfte hervor, Tooltip „Klick: diesen Spieler ins Ziel nehmen“; auch im Kampf, kein „Aktion blockiert“
+  - Owner 2026-10-18: Tank und Heiler sollen zum Auswählen klickbar sein
+- [ ] PT-GROUP-248 Kein Tank bzw. kein Heiler („-“), solo, Test-Modus oder eingeklappt: diese Hälfte ist nicht klickbar;
+  du selbst bist Tank/Heiler: Klick wählt dich; Fenster verschieben: Klickflächen liegen danach wieder genau über den Namen
+- [ ] PT-GROUP-249 Gruppe ändert sich (jemand kommt/geht, Rollen neu): Klick trifft danach den angezeigten Spieler;
+  ändert sie sich im Kampf, stimmt es spätestens nach dem Kampf wieder
 
 ## Combined
 
