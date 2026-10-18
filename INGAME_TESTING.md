@@ -56,7 +56,9 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-226 Heiler tot → „tot“ (rot); wiederbelebt → verschwindet
 - [ ] PT-GROUP-227 Heiler offline → „offline“ (rot)
 - [ ] PT-GROUP-228 Schlachtzug: Tank und Heiler stimmen (falls verfügbar)
-- [ ] PT-GROUP-229 Tank und Heiler stehen in einer Zeile („Tank Name   Heiler Name“); ohne Rolle „-“ (grau), keine geratene Rolle; lange Namen werden abgeschnitten, nichts überlappt; tot/offline rechts in Rot
+- [x] PT-GROUP-229 Tank und Heiler stehen in einer Zeile („Tank Name   Heiler Name“); ohne Rolle „-“ (grau), keine geratene Rolle; lange Namen werden abgeschnitten, nichts überlappt; tot/offline rechts in Rot
+  - ✅ VERIFIED 2026-10-18
+  - Owner: in der Abhak-Liste als „Geht“ markiert
 
 ## Tankziel
 
@@ -77,12 +79,14 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-238 Du bist selbst Tank, solo, Test-Modus oder eingeklappt: nichts anklickbar; Fenster verschieben oder
   Größe ändern: Klickfläche liegt danach wieder genau über der Zeile; Makro `/click PaTiGroupTankTargetButton` wirkt
   - MANUAL RETEST REQUIRED
-- [ ] PT-GROUP-239 Tankziel steht unter der Tank/Heiler-Zeile (mit kleinem Abstand), auf eigenem helleren Feld mit Akzentstreifen, Name und Zielmarkierung
+- [x] PT-GROUP-239 Tankziel steht unter der Tank/Heiler-Zeile (mit kleinem Abstand), auf eigenem helleren Feld mit Akzentstreifen, Name und Zielmarkierung
   größer – in der Gruppe auf einen Blick erkennbar; Klickfläche deckt die ganze (höhere) Zeile ab; alle drei Themes
   - Owner 2026-10-14: Tankziel hätte er gern besser gesehen → hervorgehoben
   - 🔧 FIX IMPLEMENTED 2026-10-14
   - Owner 2026-10-17: Tank und Heiler über das Tankziel → Reihenfolge getauscht
   - MANUAL RETEST REQUIRED
+  - ✅ VERIFIED 2026-10-18
+  - Owner: in der Abhak-Liste als „Geht“ markiert
 
 ## Combat / Sicherheit
 
@@ -90,6 +94,8 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-241 Keine `ADDON_ACTION_BLOCKED` / `ADDON_ACTION_FORBIDDEN`; `taint.log` ohne PaTiGroup-Eintrag
 - [ ] PT-GROUP-242 PaTiGroup wählt, markiert oder zaubert nie etwas
 - [ ] PT-GROUP-243 Tankziel zeigt das Bild (Porträt) des Gegners, darüber steht klein „Tankziel“; Markierung und Name rechts neben dem Bild, auf einer Höhe; Zielwechsel → Bild wechselt sofort; kein Ziel → kein Bild; die Zeile wirkt dadurch klickbar
+  - ❌ FAIL 2026-10-18
+  - Owner: in der Abhak-Liste „Geht nicht“, ohne Notiz → Nachfrage
 - [x] PT-GROUP-244 Tank tot → „tot“ (rot) hinter dem Tanknamen; wiederbelebt → verschwindet; Tank offline → „offline“ (rot)
   - ✅ VERIFIED 2026-10-17
   - Owner: „tank tot funktioniert“
@@ -104,9 +110,11 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
   - Owner 2026-10-17: links nur anwählen, rechts angreifen
   - ✅ VERIFIED 2026-10-17
   - Owner: „links und rechts klick aufs tank ziel geht auch gut“
-- [ ] PT-GROUP-247 Klick auf den Tanknamen: der Tank wird dein Ziel; Klick auf den Heilernamen: der Heiler wird dein Ziel;
+- [x] PT-GROUP-247 Klick auf den Tanknamen: der Tank wird dein Ziel; Klick auf den Heilernamen: der Heiler wird dein Ziel;
   Maus-Hover hebt die Hälfte hervor, Tooltip „Klick: diesen Spieler ins Ziel nehmen“; auch im Kampf, kein „Aktion blockiert“
   - Owner 2026-10-18: Tank und Heiler sollen zum Auswählen klickbar sein
+  - ✅ VERIFIED 2026-10-18
+  - Owner: in der Abhak-Liste als „Geht“ markiert
 - [ ] PT-GROUP-248 Kein Tank bzw. kein Heiler („-“), solo, Test-Modus oder eingeklappt: diese Hälfte ist nicht klickbar;
   du selbst bist Tank/Heiler: Klick wählt dich; Fenster verschieben: Klickflächen liegen danach wieder genau über den Namen
 - [ ] PT-GROUP-249 Gruppe ändert sich (jemand kommt/geht, Rollen neu): Klick trifft danach den angezeigten Spieler;
