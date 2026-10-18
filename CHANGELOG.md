@@ -8,7 +8,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
   player (one secure button each, `PaTiGroupTankButton` / `PaTiGroupHealerButton`, set up out of combat).
 - Tank and healer share one line, the tank target shows the enemy's portrait in front (owner 2026-10-17: a face reads as
   something you can click). The window is two lines shorter. Tank and healer stand above the tank target
-  (owner 2026-10-17). The caption "Tank target" stands above the portrait.
+  (owner 2026-10-17). The caption "Tank target" stands above the portrait. Since 2026-10-18 the caption stands above the
+  highlighted panel and outside the click area, with more room to the tank/healer line (owner).
 - Tank target click (owner 2026-10-17: "attack, not only select"): left click only targets the enemy, right click
   targets it and starts the auto attack (`/target <tank>target` + `/startattack`, one secure macro). (Briefly the
   other way round on the same day; swapped at the owner's wish.) Tank and healer each show "dead" / "offline" (before only

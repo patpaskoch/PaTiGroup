@@ -111,6 +111,9 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
   du selbst bist Tank/Heiler: Klick wählt dich; Fenster verschieben: Klickflächen liegen danach wieder genau über den Namen
 - [ ] PT-GROUP-249 Gruppe ändert sich (jemand kommt/geht, Rollen neu): Klick trifft danach den angezeigten Spieler;
   ändert sie sich im Kampf, stimmt es spätestens nach dem Kampf wieder
+- [ ] PT-GROUP-252 „Tankziel“ steht über dem hellen Feld, nicht darin; Klick auf das Wort tut nichts, Klick auf Bild/Name
+  wählt wie gewohnt (links Ziel, rechts angreifen); mehr Abstand zwischen Tank/Heiler-Zeile und Tankziel
+  - Owner 2026-10-18: das Wort soll über dem Button stehen, etwas mehr Abstand zu Tank und Heiler
 
 ## Combined
 

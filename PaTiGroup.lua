@@ -11,9 +11,11 @@ local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
 -- The tank's target stands out (owner 2026-10-14: "would have liked to see it better"): below tank and healer, taller, own panel,
 -- larger name and marker.
 -- The enemy's portrait in front (owner 2026-10-17): it reads as a unit you can click, like a target frame. The label
--- "Tank target" stands above it as a small caption; portrait, marker and name form the row below.
+-- "Tank target" stands above it as a small caption; portrait, marker and name form the row below. The caption stays
+-- outside the panel and the click area (owner 2026-10-18: the word above the button).
 local PORTRAIT, CAPTION, TARGET_MARKER = 24, 12, 20
 local TARGET_LINE = CAPTION + PORTRAIT + UI.Spacing.XS
+local CAPTION_GAP = CAPTION + UI.Spacing.XS -- panel and click area start below the caption
 local TARGET_ROW_Y = PORTRAIT / 2 - TARGET_LINE / 2 -- vertical centre of the portrait row, from the line centre
 local PAD = UI.Spacing.MD
 local MARKER_TEXTURE = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_%d"
@@ -130,7 +132,7 @@ local ORDER = { "message", "party", "target" }
 do
     local line = lines.target
     local panel = line:CreateTexture(nil, "BACKGROUND")
-    panel:SetPoint("TOPLEFT", -UI.Spacing.SM, 0)
+    panel:SetPoint("TOPLEFT", -UI.Spacing.SM, -CAPTION_GAP)
     panel:SetPoint("BOTTOMRIGHT", UI.Spacing.SM, 0)
     UI.Paint(panel, "SetColorTexture", "PanelHover")
     local stripe = line:CreateTexture(nil, "BORDER")
@@ -141,7 +143,7 @@ do
     line.value:SetFontObject(UI.Fonts.Title)
     line.markerSize = TARGET_MARKER
     line.icon:SetSize(TARGET_MARKER, TARGET_MARKER)
-    lines.party.gapAfter = UI.Spacing.SM -- the target panel keeps a little room to the line above
+    lines.party.gapAfter = UI.Spacing.MD -- room between tank/healer and the tank target (owner 2026-10-18: more)
     line.portrait = line:CreateTexture(nil, "ARTWORK")
     line.portrait:SetSize(PORTRAIT, PORTRAIT)
     line.portrait:SetPoint("BOTTOMLEFT")
@@ -150,6 +152,7 @@ do
     line.label:SetWidth(WIDTH - 2 * PAD)
     line.labelWidth = PORTRAIT + UI.Spacing.SM -- marker and name start right of the portrait
     line.valueY = TARGET_ROW_Y
+    line.clickInset = CAPTION_GAP
     line.icon:ClearAllPoints()
     line.icon:SetPoint("LEFT", line.labelWidth, TARGET_ROW_Y)
     line.extra:ClearAllPoints()
@@ -297,13 +300,14 @@ local function clearButton(button)
     button:Hide()
 end
 
--- Lays button over line, from x (window units, from the line's left edge) with the given width.
+-- Lays button over line (below its caption, if any), from x (window units, from the line's left) with width.
 local function overLine(button, line, x, width)
+    local inset = line.clickInset or 0 -- the tank target's caption is not part of the button
     local ratio = window:GetEffectiveScale() / UIParent:GetEffectiveScale()
     button:ClearAllPoints()
     button:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", (window:GetLeft() + PAD + x) * ratio,
-        (window:GetTop() - line.top) * ratio)
-    button:SetSize(width * ratio, line.height * ratio)
+        (window:GetTop() - line.top - inset) * ratio)
+    button:SetSize(width * ratio, (line.height - inset) * ratio)
     button:SetFrameStrata(window:GetFrameStrata())
     button:SetFrameLevel(window:GetFrameLevel() + 10)
 end
