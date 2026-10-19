@@ -17,6 +17,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 - The tank target stands out (owner 2026-10-14: "would have liked to see it better"): it is now the first line, taller,
   on its own lighter panel with an accent stripe, with a larger name and raid marker.
 ### Added
+- Theme **Soft Fantasy** (PaTiShared, owner wish 2026-10-19): calm slate blue, grey and violet with a muted
+  lavender accent — the fourth choice in the settings and in PaTiSuite.
 - Click the tank-target line to target that enemy (owner 2026-10-14) — like /assist, also in combat (the click takes
   what the tank has targeted right then). One secure button, set up out of combat; for a key binding use a macro
   `/click PaTiGroupTankTargetButton`. In combat the window can no longer be moved, collapsed or hidden.
