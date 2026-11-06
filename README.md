@@ -4,10 +4,12 @@
 
 ## What is PaTiGroup?
 
+> **Installation-test beta available:** [Download the current ZIP from Releases](https://github.com/patpaskoch/PaTiGroup/releases). This is an unverified preview for testing the installation, not a stable release.
+
 Party awareness for World of Warcraft: Forever (Interface 16001): see at a glance who tanks, who heals, and what
 the tank has targeted — with its raid marker. One click on the tank target takes it as your target; otherwise PaTiGroup never targets, marks or casts anything.
 
-> Status: in development, not yet released. Not yet tested in game.
+> Status: in development, not yet stable. Not yet tested in game.
 >
 > This is a **new** PaTiGroup (2026-10-02). The former PaTiGroup (raid markers, ready check, pull timer) is now
 > [PaTiLead](https://github.com/patpaskoch/PaTiLead). Old PaTiGroup settings are not taken over.
