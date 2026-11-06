@@ -2,45 +2,24 @@
 
 <img src="assets/icon-128.png" width="96" alt="PaTiGroup icon">
 
+## Install
+
+**📥 [Download PaTiGroup Beta](https://github.com/patpaskoch/PaTiGroup/releases/download/v0.1.0-beta.1/PaTiGroup-0.1.0-beta.1.zip)** · [Installation guide](#installation)
+
+*Installation-test preview — not yet a stable release.*
+
 ## What is PaTiGroup?
 
-> **Installation-test beta available:** [Download the current ZIP from Releases](https://github.com/patpaskoch/PaTiGroup/releases). This is an unverified preview for testing the installation, not a stable release.
+**Know your team. Follow your tank. Stay together.**
 
-Party awareness for World of Warcraft: Forever (Interface 16001): see at a glance who tanks, who heals, and what
-the tank has targeted — with its raid marker. One click on the tank target takes it as your target; otherwise PaTiGroup never targets, marks or casts anything.
-
-> Status: in development, not yet stable. Not yet tested in game.
->
-> This is a **new** PaTiGroup (2026-10-02). The former PaTiGroup (raid markers, ready check, pull timer) is now
-> [PaTiLead](https://github.com/patpaskoch/PaTiLead). Old PaTiGroup settings are not taken over.
-
-```
-┌ PaTiGroup                         ••• ┐
-│ Tank Patrick      Heiler Stefanie     │
-│ Tankziel                              │
-│ [face] ☠ Dunkler Kultist              │
-└───────────────────────────────────────┘
-```
+Figuring out who to follow or which enemy to focus shouldn't slow you down. PaTiGroup keeps your tank, healer and the tank's current target together in one compact view — so your party stays on the same page.
 
 ## Features
 
-- **Tank and healer** in one line: the names (you first, if you tank yourself), each with "dead" or "offline" when
-  WoW reports it, "+1" when there are more tanks or healers. **Click a name to target that player**
-  (macro: `/click PaTiGroupTankButton` or `/click PaTiGroupHealerButton`)
-- **Tank target** (below tank and healer, highlighted): what the tank has targeted, with the enemy's portrait and its raid marker; "no target" when there is none.
-  **Left click: only target that enemy**, **right click: target it and attack** (/target + /startattack) —
-  also in combat: the click takes what the tank has targeted at
-  that moment. Key binding: a macro with `/click PaTiGroupTankTargetButton` (= left click: only target). Not shown when you are the tank
-- Party and raid; solo: "Not in a group"
-- Roles come from WoW (role check / group finder). Without assigned roles nobody shows as tank or healer ("-") — PaTiGroup never
-  guesses a role from the class. Unreadable (restricted) values are never guessed either.
-- Updates normally in combat. The click button is set up out of combat, so in combat the window cannot be moved,
-  collapsed or hidden (after a roster change in combat the click follows when combat ends).
-- ••• menu: Settings, Lock, Collapse, Test Mode, Hide. Settings: language, scale, lock, panel opacity.
-  Languages: English, Deutsch (others fall back to English)
-
-Not part of PaTiGroup: raid markers, ready check, pull timer and other leader actions (→ PaTiLead), threat and aggro
-(→ PaTiAggro), HoTs and heal details (→ PaTiHeal).
+- **Your key teammates:** Spot the tank and healer at a glance.
+- **Tank's target:** See the enemy's portrait and raid marker.
+- **Quick targeting:** Click a teammate or the tank's target; right-click the target to attack.
+- **Party awareness:** Clear role and member status in a compact view.
 
 ## Installation
 
@@ -60,6 +39,45 @@ Not part of PaTiGroup: raid markers, ready check, pull timer and other leader ac
 ## Settings
 
 Open `/pg settings` or the window's menu to configure the addon. Use `/pg lock` or `/pg unlock` to control window movement.
+
+## Important notes
+
+> **Installation-test beta available:** [Download the current ZIP from Releases](https://github.com/patpaskoch/PaTiGroup/releases). This is an unverified preview for testing the installation, not a stable release.
+
+> Status: in development, not yet stable. Not yet tested in game.
+>
+> This is a **new** PaTiGroup (2026-10-02). The former PaTiGroup (raid markers, ready check, pull timer) is now
+> [PaTiLead](https://github.com/patpaskoch/PaTiLead). Old PaTiGroup settings are not taken over.
+
+## Preview
+
+```
+┌ PaTiGroup                         ••• ┐
+│ Tank Patrick      Heiler Stefanie     │
+│ Tankziel                              │
+│ [face] ☠ Dunkler Kultist              │
+└───────────────────────────────────────┘
+```
+
+## Feature details
+
+- **Tank and healer** in one line: the names (you first, if you tank yourself), each with "dead" or "offline" when
+  WoW reports it, "+1" when there are more tanks or healers. **Click a name to target that player**
+  (macro: `/click PaTiGroupTankButton` or `/click PaTiGroupHealerButton`)
+- **Tank target** (below tank and healer, highlighted): what the tank has targeted, with the enemy's portrait and its raid marker; "no target" when there is none.
+  **Left click: only target that enemy**, **right click: target it and attack** (/target + /startattack) —
+  also in combat: the click takes what the tank has targeted at
+  that moment. Key binding: a macro with `/click PaTiGroupTankTargetButton` (= left click: only target). Not shown when you are the tank
+- Party and raid; solo: "Not in a group"
+- Roles come from WoW (role check / group finder). Without assigned roles nobody shows as tank or healer ("-") — PaTiGroup never
+  guesses a role from the class. Unreadable (restricted) values are never guessed either.
+- Updates normally in combat. The click button is set up out of combat, so in combat the window cannot be moved,
+  collapsed or hidden (after a roster change in combat the click follows when combat ends).
+- ••• menu: Settings, Lock, Collapse, Test Mode, Hide. Settings: language, scale, lock, panel opacity.
+  Languages: English, Deutsch (others fall back to English)
+
+Not part of PaTiGroup: raid markers, ready check, pull timer and other leader actions (→ PaTiLead), threat and aggro
+(→ PaTiAggro), HoTs and heal details (→ PaTiHeal).
 
 ## PaTiSuite
 
