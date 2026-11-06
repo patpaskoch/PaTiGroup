@@ -60,10 +60,14 @@ Each one is installed on its own and works on its own; none of them is needed by
 - [PaTiSuite](https://github.com/patpaskoch/PaTiSuite) – shows and hides this window together with the other PaTi windows
 
 ## Installation
-1. Download the release zip (`PaTiGroup-<version>.zip`).
-2. Unpack it and copy the folder `PaTiGroup` into `World of Warcraft/<client>/Interface/AddOns/`
-   (replace an old `PaTiGroup` folder completely).
-3. Start WoW and enable PaTiGroup in the AddOns list.
+
+![PaTiGroup – three-step installation guide](assets/installation_en.svg)
+
+1. 📥 **Download** – Open [GitHub Releases](https://github.com/patpaskoch/PaTiGroup/releases) and download the `PaTiGroup-<version>.zip` file under **Assets** (not **Source code (zip)**).
+2. 📂 **Extract & Copy** – Right-click the ZIP, select **Extract All**, then copy the extracted `PaTiGroup` folder into the WoW Forever client's `Interface/AddOns/` folder. No renaming is needed.
+3. ☑️ **Enable in Game** – Start WoW, open the **AddOns** menu at character selection, tick **PaTiGroup**, and click **OK**.
+
+**Updating an older installation?** Replace the old `PaTiGroup` folder completely.
 
 ## Commands
 `/pg`, `/ptg` or `/patigroup` — alone or `toggle`: show/hide · `settings` · `test` · `show` · `hide` · `lock` ·
