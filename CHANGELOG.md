@@ -2,7 +2,12 @@
 
 Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed, Removed, Known Issues.
 
-## [Unreleased] — 0.1.0
+## [Unreleased]
+
+## [0.1.0-beta.1] - 2026-11-06
+
+**Installation-test pre-release:** Not yet validated in the live WoW Forever client. Intended for the owner's fresh-install test only; report bugs on GitHub.
+
 ### Changed
 - Tank and healer are clickable (owner 2026-10-18): a click on the tank or the healer half of the line targets that
   player (one secure button each, `PaTiGroupTankButton` / `PaTiGroupHealerButton`, set up out of combat).
