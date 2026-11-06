@@ -2,6 +2,8 @@
 
 <img src="assets/icon-128.png" width="96" alt="PaTiGroup icon">
 
+## What is PaTiGroup?
+
 Party awareness for World of Warcraft: Forever (Interface 16001): see at a glance who tanks, who heals, and what
 the tank has targeted — with its raid marker. One click on the tank target takes it as your target; otherwise PaTiGroup never targets, marks or casts anything.
 
@@ -19,6 +21,7 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 ```
 
 ## Features
+
 - **Tank and healer** in one line: the names (you first, if you tank yourself), each with "dead" or "offline" when
   WoW reports it, "+1" when there are more tanks or healers. **Click a name to target that player**
   (macro: `/click PaTiGroupTankButton` or `/click PaTiGroupHealerButton`)
@@ -36,6 +39,25 @@ the tank has targeted — with its raid marker. One click on the tank target tak
 
 Not part of PaTiGroup: raid markers, ready check, pull timer and other leader actions (→ PaTiLead), threat and aggro
 (→ PaTiAggro), HoTs and heal details (→ PaTiHeal).
+
+## Installation
+
+![PaTiGroup – three-step installation guide](assets/installation_en.svg)
+
+1. 📥 **Download** – Open [GitHub Releases](https://github.com/patpaskoch/PaTiGroup/releases) and download the `PaTiGroup-<version>.zip` file under **Assets** (not **Source code (zip)**).
+2. 📂 **Extract & Copy** – Right-click the ZIP, select **Extract All**, then copy the extracted `PaTiGroup` folder into the WoW Forever client's `Interface/AddOns/` folder. No renaming is needed.
+3. ☑️ **Enable in Game** – Start WoW, open the **AddOns** menu at character selection, tick **PaTiGroup**, and click **OK**.
+
+**Updating an older installation?** Replace the old `PaTiGroup` folder completely.
+
+## Getting Started
+
+- Use `/pg` to open or hide the group window.
+- Join a party to see the tank, healer and the tank's target; use `/pg test` for example data.
+
+## Settings
+
+Open `/pg settings` or the window's menu to configure the addon. Use `/pg lock` or `/pg unlock` to control window movement.
 
 ## PaTiSuite
 
@@ -59,21 +81,13 @@ Each one is installed on its own and works on its own; none of them is needed by
 - [PaTiLead](https://github.com/patpaskoch/PaTiLead) – the leader sets the markers PaTiGroup shows
 - [PaTiSuite](https://github.com/patpaskoch/PaTiSuite) – shows and hides this window together with the other PaTi windows
 
-## Installation
-
-![PaTiGroup – three-step installation guide](assets/installation_en.svg)
-
-1. 📥 **Download** – Open [GitHub Releases](https://github.com/patpaskoch/PaTiGroup/releases) and download the `PaTiGroup-<version>.zip` file under **Assets** (not **Source code (zip)**).
-2. 📂 **Extract & Copy** – Right-click the ZIP, select **Extract All**, then copy the extracted `PaTiGroup` folder into the WoW Forever client's `Interface/AddOns/` folder. No renaming is needed.
-3. ☑️ **Enable in Game** – Start WoW, open the **AddOns** menu at character selection, tick **PaTiGroup**, and click **OK**.
-
-**Updating an older installation?** Replace the old `PaTiGroup` folder completely.
-
 ## Commands
+
 `/pg`, `/ptg` or `/patigroup` — alone or `toggle`: show/hide · `settings` · `test` · `show` · `hide` · `lock` ·
 `unlock` · `reset` (position) · `debug` · `version`
 
 ## Known limitations
+
 - Not tested in game yet. Whether the Forever client reports roles without the group finder is unconfirmed
   (`/pg debug` lists every member's role).
 - The tank's target of another player is read from `party1target` etc.; out of range it may show "no target".
@@ -83,4 +97,5 @@ Each one is installed on its own and works on its own; none of them is needed by
 Architecture, tests and engineering rules of the suite: [PaTiAdmin](https://github.com/patpaskoch/PaTiAdmin). PaTiAdmin is not a WoW addon — players do not install it. The shared UI code (PaTiShared) is already embedded in this addon's `Shared/` folder; there is nothing extra to install.
 
 ## License
+
 MIT — see [LICENSE](LICENSE). Copyright (c) 2026 Patrick Koch.
