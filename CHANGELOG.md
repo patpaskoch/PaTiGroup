@@ -3,6 +3,10 @@
 Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed, Removed, Known Issues.
 
 ## [Unreleased] — 0.1.0
+### Added
+- Locking or unlocking the window (••• menu, slash command or settings) now answers with a chat line,
+  e.g. "Window locked." (PaTiShared, owner 2026-11-07).
+
 ### Changed
 - Tank and healer are clickable (owner 2026-10-18): a click on the tank or the healer half of the line targets that
   player (one secure button each, `PaTiGroupTankButton` / `PaTiGroupHealerButton`, set up out of combat).
