@@ -4,6 +4,8 @@ Format: `## [Unreleased]` / `## [x.y.z] - YYYY-MM-DD` with Added, Changed, Fixed
 
 ## [Unreleased] — 0.1.0
 ### Changed
+- The tank target has a health bar below its portrait and name (owner 2026-11-17). WoW sends no health event for
+  "the tank's target", so the bar re-reads it five times a second while it is shown.
 - Tank and healer are clickable (owner 2026-10-18): a click on the tank or the healer half of the line targets that
   player (one secure button each, `PaTiGroupTankButton` / `PaTiGroupHealerButton`, set up out of combat).
 - Tank and healer share one line, the tank target shows the enemy's portrait in front (owner 2026-10-17: a face reads as
