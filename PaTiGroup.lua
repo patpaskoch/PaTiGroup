@@ -14,9 +14,14 @@ local WIDTH, LINE, LABEL_WIDTH, MARKER = 250, 18, 72, 14
 -- "Tank target" stands above it as a small caption; portrait, marker and name form the row below. The caption stays
 -- outside the panel and the click area (owner 2026-10-18: the word above the button).
 local PORTRAIT, CAPTION, TARGET_MARKER = 24, 12, 20
-local TARGET_LINE = CAPTION + PORTRAIT + UI.Spacing.XS
+-- Health bar of the tank target below portrait and name (owner 2026-11-17); judge the height in game.
+local HEALTH_BAR = 6
+local HEALTH_SPACE = HEALTH_BAR + UI.Spacing.XS
+local TARGET_LINE = CAPTION + PORTRAIT + UI.Spacing.XS + HEALTH_SPACE
 local CAPTION_GAP = CAPTION + UI.Spacing.XS -- panel and click area start below the caption
-local TARGET_ROW_Y = PORTRAIT / 2 - TARGET_LINE / 2 -- vertical centre of the portrait row, from the line centre
+-- Vertical centre of the portrait row, from the line centre (the health bar lies below the row).
+local TARGET_ROW_Y = PORTRAIT / 2 - TARGET_LINE / 2 + HEALTH_SPACE
+local TEST_HEALTH = 0.6 -- the example target's health share in test mode
 local PAD = UI.Spacing.MD
 local MARKER_TEXTURE = "Interface\\TargetingFrame\\UI-RaidTargetingIcon_%d"
 local TEST = { tank = "TEST_TANK", healer = "TEST_HEALER", target = "TEST_TARGET", marker = 8 }
@@ -146,7 +151,7 @@ do
     lines.party.gapAfter = UI.Spacing.MD -- room between tank/healer and the tank target (owner 2026-10-18: more)
     line.portrait = line:CreateTexture(nil, "ARTWORK")
     line.portrait:SetSize(PORTRAIT, PORTRAIT)
-    line.portrait:SetPoint("BOTTOMLEFT")
+    line.portrait:SetPoint("BOTTOMLEFT", 0, HEALTH_SPACE)
     line.label:ClearAllPoints()
     line.label:SetPoint("TOPLEFT")
     line.label:SetWidth(WIDTH - 2 * PAD)
@@ -157,6 +162,50 @@ do
     line.icon:SetPoint("LEFT", line.labelWidth, TARGET_ROW_Y)
     line.extra:ClearAllPoints()
     line.extra:SetPoint("RIGHT", 0, TARGET_ROW_Y)
+    -- Health bar across the line's width below portrait and name. A plain StatusBar (no secure frame): health values
+    -- may be secret, so they only reach SetMinMaxValues/SetValue (Logic.HealthBar), never a comparison.
+    local health = CreateFrame("StatusBar", nil, line)
+    health:SetPoint("BOTTOMLEFT", 0, UI.Spacing.XS)
+    health:SetPoint("BOTTOMRIGHT", 0, UI.Spacing.XS)
+    health:SetHeight(HEALTH_BAR)
+    health:SetStatusBarTexture(UI.WHITE)
+    UI.Paint(health, "SetStatusBarColor", "Health")
+    local healthBack = health:CreateTexture(nil, "BACKGROUND")
+    healthBack:SetAllPoints()
+    UI.Paint(healthBack, "SetColorTexture", "Background")
+    health:Hide()
+    line.health = health
+end
+
+-- WoW sends no UNIT_HEALTH for "<tank>target", so the bar re-reads its token a few times a second — only while it is
+-- shown (an OnUpdate does not run on a hidden frame) and only for that one token.
+local HEALTH_REFRESH = 0.2 -- seconds
+do
+    local health, since = lines.target.health, 0
+    health:SetScript("OnUpdate", function(self, elapsed)
+        since = since + elapsed
+        if since < HEALTH_REFRESH then return end
+        since = 0
+        if not self.token then return end
+        local maximum, value = Logic.HealthBar(UnitHealth(self.token), UnitHealthMax(self.token), isSecret)
+        if maximum then
+            self:SetMinMaxValues(0, maximum)
+            self:SetValue(value)
+        end
+    end)
+end
+
+-- token: whose health to show (nil = none). Painted at once; the OnUpdate above keeps it current.
+local function setHealth(token)
+    local health = lines.target.health
+    health.token = token
+    local maximum, value
+    if token then maximum, value = Logic.HealthBar(UnitHealth(token), UnitHealthMax(token), isSecret) end
+    if maximum then
+        health:SetMinMaxValues(0, maximum)
+        health:SetValue(value)
+    end
+    health:SetShown(maximum ~= nil)
 end
 
 -- token: whose face to show (nil = none). SetPortraitTexture takes the unit token itself, no unit data is read.
@@ -222,17 +271,20 @@ end
 local function paintTarget(tank)
     if not tank then
         setPortrait(nil)
+        setHealth(nil)
         setLine(lines.target, L.NO_TANK, true)
         return
     end
     local token = Logic.TargetOf(tank.unit)
     if Logic.Flag(UnitExists(token), isSecret) ~= true then
         setPortrait(nil)
+        setHealth(nil)
         setLine(lines.target, L.NO_TARGET, true)
         return
     end
     local marker = Logic.MarkerIndex(GetRaidTargetIndex and GetRaidTargetIndex(token), isSecret)
     setPortrait(token)
+    setHealth(token)
     setLine(lines.target, UnitName(token), false, nil, marker)
 end
 
@@ -248,6 +300,11 @@ local function paintLines()
     if testMode then
         paintParty({ name = L[TEST.tank] }, { name = L[TEST.healer] })
         setPortrait("player") -- any face will do for the example
+        local health = lines.target.health
+        health.token = nil -- the example bar stays as it is
+        health:SetMinMaxValues(0, 1)
+        health:SetValue(TEST_HEALTH)
+        health:Show()
         setLine(lines.target, L[TEST.target], false, nil, TEST.marker)
         showLines({ party = true, target = true })
         return

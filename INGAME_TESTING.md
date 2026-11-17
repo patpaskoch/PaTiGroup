@@ -122,6 +122,12 @@ Neues PaTiGroup (Party Awareness, 2026-10-02). Die IDs `PT-GROUP-001…199` geh�
 - [ ] PT-GROUP-252 „Tankziel“ steht über dem hellen Feld, nicht darin; Klick auf das Wort tut nichts, Klick auf Bild/Name
   wählt wie gewohnt (links Ziel, rechts angreifen); mehr Abstand zwischen Tank/Heiler-Zeile und Tankziel
   - Owner 2026-10-18: das Wort soll über dem Button stehen, etwas mehr Abstand zu Tank und Heiler
+- [ ] PT-GROUP-253 Tankziel hat einen Lebensbalken unter Bild und Name: sinkt sichtbar, während die Gruppe den Gegner
+  angreift (auch wenn er nicht dein Ziel ist); ohne Tankziel kein Balken; Testmodus zeigt einen Beispielbalken;
+  Klick auf die Zeile wählt weiterhin (links Ziel, rechts angreifen); kein Lua-Fehler
+  - Owner 2026-11-17: Tankziel soll einen Lebensbalken haben
+  - 🔧 FIX IMPLEMENTED 2026-11-17
+  - MANUAL RETEST REQUIRED
 
 ## Combined
 

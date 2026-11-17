@@ -95,6 +95,14 @@ function Logic.TargetOf(unit)
     return unit .. "target"
 end
 
+-- Values for the tank target's health bar (owner 2026-11-17): maximum, value — or nil when there is nothing to show.
+-- Secret values pass through untouched (the widget may take them, AGENTS.md §8); plain ones need a maximum above 0.
+function Logic.HealthBar(health, maximum, isSecret)
+    if isSecret(health) or isSecret(maximum) then return maximum, health end
+    if type(health) ~= "number" or type(maximum) ~= "number" or maximum <= 0 then return nil end
+    return maximum, health
+end
+
 -- "+2" for the members after the first one of a role, or nil.
 function Logic.MoreText(list)
     if #list > 1 then return "+" .. (#list - 1) end
